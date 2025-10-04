@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/02 20:43:20 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 10:35:50 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <stdio.h>
+# include "../Libft/libft.h"
 
 /* ================= Config ================= */
 # ifndef WIDTH

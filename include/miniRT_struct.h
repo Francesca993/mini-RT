@@ -6,12 +6,14 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/02 21:56:07 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 10:35:50 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINI_RT_STRUCT_H
 # define MINI_RT_STRUCT_H
+
+# include <stdbool.h>
 
 /* --- Coordinate --- */
 typedef struct s_vec3
