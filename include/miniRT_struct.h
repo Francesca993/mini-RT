@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/02 20:43:06 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/02 21:56:07 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,18 @@
 /* --- Coordinate --- */
 typedef struct s_vec3
 {
-	double x;
-	double y;
-	double z;
+	double	x;
+	double	y;
+	double	z;
 }			t_vec3;
 
 /* --- Colori --- */
 // Colori interni in spazio lineare [0..1]
 typedef struct s_color
 {
-	double r;
-	double g;
-	double b;
+	double	r;
+	double	g;
+	double	b;
 }			t_color;
 
 /* --- Ambiente --- */
@@ -58,6 +58,40 @@ typedef struct s_light
 	t_color color;    // normalizzato 0..1
 	bool	present;
 }			t_light;
+
+/* --- Oggetti (solo struct, niente logica) --- */
+typedef enum e_objtype
+{
+	OBJ_SPHERE,
+	OBJ_PLANE,
+	OBJ_CYLINDER
+}			t_objtype;
+
+/* --- Sphere --- */
+typedef struct s_sphere
+{
+	t_vec3 center; // centro
+	double radius; // diametro/2, precomputato dal parser
+	t_color color; // 0..1
+}			t_sphere;
+
+/* --- Plane --- */
+typedef struct s_plane
+{
+	t_vec3 point;  // un punto sul piano
+	t_vec3 normal; // normalizzata
+	t_color color; // 0..1
+}			t_plane;
+
+/* --- Cylinder --- */
+typedef struct s_cylinder
+{
+	t_vec3 base;   // punto base lungo l'asse (convenz.
+	t_vec3 axis;   // direzione normalizzata
+	double radius; // diametro/2
+	double height; // altezza finita
+	t_color color; // 0..1
+}			t_cylinder;
 
 // --- scene container ---
 typedef struct s_scene

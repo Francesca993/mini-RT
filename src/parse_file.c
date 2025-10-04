@@ -6,9 +6,13 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/02 09:49:41 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/02 22:02:10 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/miniRT.h"
 
+int     parse_file(char** argv, t_scene *scene)
+{
+    
+}
