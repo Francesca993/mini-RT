@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:13:26 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:17:55 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,9 @@ static void	scene_reset(t_scene *scene)
 	return ;
 }
 /*-- Copia il file fd dentro una matrice, saltando righe vuote e spazi --*/
-static char	**alloc_data(data, num_line, path)
+static char	**alloc_data(size_t num_line, char *path)
 {
+	char **data;
 	char	*line;
 	size_t	i;
 	int		fd;
@@ -97,8 +98,8 @@ int	parse_file(char *path, t_scene *scene)
 	if (count_line(num_line, path) == -1)
 		return (1);
 	// vado a mettere i dati nella matrice
-	if (alloc_data(data, num_line, path) != 0)
-		return (1);
+	data = alloc_data_from_file(path, num_line);
+    if (!data) return 1;
 
 	// funzione che serve per check unicità e che ci sia almeno un elemento
 	// if (check_startingscene(scene) != 0)
