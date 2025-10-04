@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:26:22 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:44:42 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		key_hook(int keycode, void *param);
 void	print_usage(const char *prog);
 void    free_array(char **arr);
 int	    count_line(size_t num_line, const char *path);
+void	chop_newline(char *s); // Rimuove /n finale
 
 /* ================= ft_skip_spaces ================= */
 int ft_is_blank(const char *s);

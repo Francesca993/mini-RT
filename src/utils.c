@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:27:05 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:45:06 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,18 @@ int	count_line(size_t num_line, const char *path)
 		return (-1);
 	}
 	return (num_line);
+}
+
+/* Rimuove New_line finale */
+void	chop_newline(char *s)
+
+{
+	size_t	n;
+
+	if (!s)
+		return ;
+	n = ft_strlen(s);
+	if (n > 0 && s[n - 1] == '\n')
+		s[n - 1] = '\0';
+	return ;
 }

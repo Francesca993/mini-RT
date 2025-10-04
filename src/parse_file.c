@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:29:56 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:48:42 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	scene_reset(t_scene *scene)
 /*-- Copia il file fd dentro una matrice, saltando righe vuote e spazi --*/
 static char	**alloc_data(size_t num_line, const char *path)
 {
-	char **data;
+	char	**data;
 	char	*line;
 	size_t	i;
 	int		fd;
@@ -56,6 +56,7 @@ static char	**alloc_data(size_t num_line, const char *path)
 		// 	free_strarray(data);
 		// 	return (NULL);
 		// }
+		chop_newline(line); // Rimuove New line finale e mette '0'
 		data[i++] = ft_strdup(line); // copia la riga utile
 		free(line);
 	}
@@ -71,9 +72,10 @@ static char	**alloc_data(size_t num_line, const char *path)
 
 int	parse_file(const char *path, t_scene *scene)
 {
-	size_t num_line; // Contatore del numero di riga
-	char **data = NULL;
+	char	**data;
 
+	size_t num_line; // Contatore del numero di riga
+	data = NULL;
 	if (!path || !scene)
 	{
 		printf("parse_file: argomenti non validi\n");
@@ -82,19 +84,22 @@ int	parse_file(const char *path, t_scene *scene)
 	// potrei inserire direttamente qui il controllo del .rt
 	scene_reset(scene); // reset contatori
 	num_line = count_line(0, path);
-	if (num_line == (size_t) -1)
-    	return (1);
+	if (num_line == (size_t)-1)
+		return (1);
 	// vado a mettere i dati nella matrice
 	data = alloc_data(num_line, path);
-    if (!data) return 1;
-
-	//DEBUG
+	if (!data)
+		return (1);
+	/*
+	**
+	** ORA QUI METTERO UNA FUNZIONE CHE PRENDE DATA E LA T_SCENE E FA TUTTO
+	**
+	*/
+	// DEBUG
 	for (size_t i = 0; data && data[i]; i++)
-    printf("riga %zu: %s\n", i, data[i]);
-
+		printf("riga %zu: %s\n", i, data[i]);
 	// funzione che serve per check unicità e che ci sia almeno un elemento
-	// if (check_startingscene(scene) != 0)
+	// if (check_startingscene(data) != 0)
 	//     return (1);
-	// else
 	return (0);
 }

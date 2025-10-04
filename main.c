@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 10:51:18 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/04 12:36:05 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:36:57 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ int	main(int argc, char **argv)
         perror("calloc");
         return (1);
     }
-	// if (parse_file(argv[1], scene) != 0) 
-	// {
-    //     fprintf(stderr, "Parsing fallito per '%s'\n", argv[1]);
-    //     free(scene);
-    //     return 1;
-    // }
+	if (parse_file(argv[1], scene) != 0) 
+	{
+        fprintf(stderr, "Parsing fallito per '%s'\n", argv[1]);
+        free(scene);
+        return 1;
+    }
 	//     // Per ora solo feedback:
     // printf("OK: A=%d C=%d L=%d sp=%d pl=%d cy=%d\n",
     //        scene->n_ambient, scene->n_camera, scene->n_lights,
