@@ -9,12 +9,12 @@ Righe vuote e spazi: puoi ignorare righe vuote o solo spazi/tab. Gli elementi so
 
 Identificatori validi: solo questi token a inizio riga sono permessi nel mandatory: A, C, L, sp, pl, cy. Qualsiasi altro identificatore → errore di parsing.
 
-Presenze obbligatorie e unicità:
+✅ Presenze obbligatorie e unicità:
 A una sola volta.
 C una sola volta.
 L una sola volta nel mandatory (nel bonus potranno essere più luci).
 
-Almeno un oggetto (sp/pl/cy) deve essere presente per avere qualcosa da renderizzare (se non c’è nulla → errore logico di scena vuota).
+✅ Almeno un oggetto (sp/pl/cy) deve essere presente per avere qualcosa da renderizzare (se non c’è nulla → errore logico di scena vuota).
 
 Formato dei gruppi con virgole: 
 - coordinate/orientazioni/colori sono sempre nel formato x,y,z e R,G,B 
