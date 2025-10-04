@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:12:37 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:26:22 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,11 @@ int		key_hook(int keycode, void *param);
 /* ================= Utils ================= */
 void	print_usage(const char *prog);
 void    free_array(char **arr);
-int	    count_line(size_t num_line, char *path);
+int	    count_line(size_t num_line, const char *path);
+
+/* ================= ft_skip_spaces ================= */
+int ft_is_blank(const char *s);
+int ft_is_space_char(char c);
 
 /* ================= Check File ================= */
 int		has_rt_extension(const char *path); // controlla che abbia l'estensione .rt
@@ -62,6 +66,4 @@ int     check_startingscene(t_scene *scene); // controlla che cia sia una sola A
 
 /* ================= Parse File ================= */
 int     parse_file(const char *path, t_scene *scene);
-char	**alloc_data(data, num_line, path); // Copia il file fd dentro una matrice, saltando righe vuote e spazi
-
 #endif

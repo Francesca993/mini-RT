@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:12:26 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:27:05 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ void free_array(char **arr)
 }
 /*Conta le righe del fd saltando quelle vuote, mi serve all inzio per creare una 
 matrice dati dentro cui "copiare" solo i dati utili del FD*/
-int	count_line(size_t num_line, char *path)
+int	count_line(size_t num_line, const char *path)
 {
 	char	*line;
+	int 	fd;
 
-	if (!path || !scene)
+	if (!path)
 	{
 		printf("parse_file: argomenti non validi\n");
 		return (-1);

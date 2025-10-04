@@ -6,7 +6,7 @@
 #    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:20:24 by francesca         #+#    #+#              #
-#    Updated: 2025/10/04 12:16:52 by francesca        ###   ########.fr        #
+#    Updated: 2025/10/04 15:28:31 by francesca        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,9 @@ OBJ_DIR = obj
 # === Sources ===
 SRC =	main.c \
 		src/utils.c \
-		src/check_file.c
+		src/check_file.c \
+		src/ft_skip_spaces.c \
+		src/parse_file.c \
 
 # === Object files ===
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

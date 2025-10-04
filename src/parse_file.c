@@ -6,23 +6,11 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:17:55 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 15:29:56 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./include/miniRT.h"
-
-/* --- helper: togli il '\n' finale se presente --- */
-static void	chop_newline(char *s)
-{
-	size_t	n;
-
-	if (!s)
-		return ;
-	n = ft_strlen(s);
-	if (n > 0 && s[n - 1] == '\n')
-		s[n - 1] = '\0';
-}
+#include "miniRT.h"
 
 static void	scene_reset(t_scene *scene)
 {
@@ -35,7 +23,7 @@ static void	scene_reset(t_scene *scene)
 	return ;
 }
 /*-- Copia il file fd dentro una matrice, saltando righe vuote e spazi --*/
-static char	**alloc_data(size_t num_line, char *path)
+static char	**alloc_data(size_t num_line, const char *path)
 {
 	char **data;
 	char	*line;
@@ -81,11 +69,9 @@ static char	**alloc_data(size_t num_line, char *path)
 	return (data);
 }
 
-int	parse_file(char *path, t_scene *scene)
+int	parse_file(const char *path, t_scene *scene)
 {
-	int fd;
 	size_t num_line; // Contatore del numero di riga
-	char *line;
 	char **data = NULL;
 
 	if (!path || !scene)
@@ -95,11 +81,16 @@ int	parse_file(char *path, t_scene *scene)
 	}
 	// potrei inserire direttamente qui il controllo del .rt
 	scene_reset(scene); // reset contatori
-	if (count_line(num_line, path) == -1)
-		return (1);
+	num_line = count_line(0, path);
+	if (num_line == (size_t) -1)
+    	return (1);
 	// vado a mettere i dati nella matrice
-	data = alloc_data_from_file(path, num_line);
+	data = alloc_data(num_line, path);
     if (!data) return 1;
+
+	//DEBUG
+	for (size_t i = 0; data && data[i]; i++)
+    printf("riga %zu: %s\n", i, data[i]);
 
 	// funzione che serve per check unicità e che ci sia almeno un elemento
 	// if (check_startingscene(scene) != 0)
