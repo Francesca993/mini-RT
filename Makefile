@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+         #
+#    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:20:24 by francesca         #+#    #+#              #
-#    Updated: 2025/09/29 11:55:01 by fmontini         ###   ########.fr        #
+#    Updated: 2025/10/04 12:16:52 by francesca        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,15 +23,12 @@ NAME	= miniRT
 # === Compiler settings ===
 CC		= cc
 CFLAGS = -Wall -Wextra -Werror -g -gdwarf-4 -Iinclude -I$(LIBFT_DIR)
-LDFLAGS	= -L/usr/lib -lX11 -lXext -lm -lbsd
+#LDFLAGS	= -L/usr/lib -lX11 -lXext -lm -lbsd
 
 # === Libraries ===
 LIBFT_DIR = Libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-MLX_DIR = minilibx
-MLX = $(MLX_DIR)/libmlx.a
-MLX_FLAGS = -L$(MLX_DIR) -lmlx
 
 # === Directories ===
 SRC_DIR = .
@@ -39,7 +36,8 @@ OBJ_DIR = obj
 
 # === Sources ===
 SRC =	main.c \
-		hook/hook.c
+		src/utils.c \
+		src/check_file.c
 
 # === Object files ===
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
@@ -47,26 +45,25 @@ OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 # === Rules ===
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(MLX) $(OBJ)
+$(NAME): $(LIBFT) $(OBJ)
 	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT) $(MLX_FLAGS) $(LDFLAGS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(LIBFT)
+
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@echo "$(BLUE)Compiling $<...$(RESET)"
-	@$(CC) $(CFLAGS) -I$(MLX_DIR) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
-$(MLX):
-	@make -C $(MLX_DIR)
 
 clean:
 	@echo "$(RED)Cleaning object files...$(RESET)"
 	@rm -rf $(OBJ_DIR)
 	@make clean -C $(LIBFT_DIR)
-	@make clean -C $(MLX_DIR)
+
 
 fclean: clean
 	@echo "$(RED)Removing $(NAME)...$(RESET)"

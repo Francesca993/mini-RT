@@ -100,3 +100,4 @@ Orientazione non normalizzata / fuori [-1,1] / zero vector: errore (non normaliz
 Valori fuori range (colori, ratio, FOV, dimensioni non positive): errore.
 
 Duplicati A/C/L: se trovi una seconda istanza → errore. 
+

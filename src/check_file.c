@@ -6,11 +6,11 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 10:30:24 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 12:21:01 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./include/miniRT.h"
+#include "miniRT.h"
 #include <string.h>
 
 //Controlla che il file sia .rt

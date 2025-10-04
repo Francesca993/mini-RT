@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/04 10:35:50 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 12:12:18 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define RT_H
 
 # include "miniRT_struct.h"
-# include "mlx.h"
 # include <math.h>
 # include <stdbool.h>
 # include <stddef.h>

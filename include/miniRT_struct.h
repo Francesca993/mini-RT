@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 10:35:50 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 12:03:32 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ typedef struct s_vec3
 	double	x;
 	double	y;
 	double	z;
+	//double	w;
 }			t_vec3;
 
 /* --- Colori --- */

@@ -6,7 +6,7 @@
 #    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/18 11:58:42 by francesca         #+#    #+#              #
-#    Updated: 2025/10/04 10:30:23 by francesca        ###   ########.fr        #
+#    Updated: 2025/10/04 12:34:07 by francesca        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS = ft_isalpha.c \
        ft_memchr.c \
        ft_memcmp.c \
        ft_strnstr.c \
+       ft_strcmp.c \
        ft_atoi.c \
        ft_calloc.c \
        ft_memcpy.c \
@@ -70,10 +71,11 @@ SRCS = ft_isalpha.c \
        ft_lstiter.c \
        ft_lstmap.c
 
-OBJS := $(SRCS:$(SRCS_DIR)%.c=$(OBJS_DIR)%.o)
+
+OBJS := $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 
 # === Custom rule for colorized compilation === #
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c
+$(OBJS_DIR)%.o: %.c
 	@mkdir -p $(OBJS_DIR)
 	@echo "$(BLUE)Compiling Libft $<...$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
