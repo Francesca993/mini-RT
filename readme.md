@@ -3,9 +3,7 @@ All'inizio del mio main c'è una funzione di check sul file, che sia .rt. vorrei
 ora sto stilando una lista completa di tutti i check da fare mentre carico il file e di tutto cio che devo controllare secondo il subject.
 
 **Fatto e da fare:**
--> ho fatto una funzione che legge il file con get_next_line, una sola volta er lo butta dentro una matrice dati, saltando gia le righe vuote. cosi evito di andare a leggere piu volte il file con gnl, anche se potrebbe rallentare il programma con file troppo grossi.
--> da qui devo andare a fare tutti i check: il primo sono le presenze obbligatorie. 
--> poi devo fare un lexer che prenda questa matrice e la divida in token, li associ ai type definiti, e ne controlli la validita
+-> ho fatto una funzione che legge il file con get_next_line, ne prende il primo frammento e a seconda dell id partira una funzione che farà il check su i parametri e se corretti creerà la struttura dati. Allo stesso tempo tiene il conto nella t_scene delle presenze. 
 
 Estensione .rt già verificata per il momento nel main ✅
 

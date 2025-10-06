@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/06 18:30:30 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 21:51:02 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,29 +20,33 @@ static void	scene_reset(t_scene *scene)
 	scene->n_spheres = 0;
 	scene->n_planes = 0;
 	scene->n_cylinders = 0;
-	scene->data_file.data = NULL;
-	scene->data_file.num_line = 0;
-	
 	return ;
 }
-/*-- Copia il file fd dentro una matrice, saltando righe vuote e spazi --*/
-static char	**alloc_data(ssize_t num_line, const char *path)
+
+int	parse_file(const char *path, t_scene *scene)
 {
-	char	**data;
-	char	*line;
+	char	**data;	char	*line;
 	ssize_t	i;
 	int		fd;
 
+	if (!path || !scene)
+	{
+		printf("parse_file: argomenti non validi\n");
+		return (1);
+	}
+	
 	i = 0;
+	scene_reset(scene); // reset contatori
 	data = ft_calloc(num_line + 1, sizeof(char *));
 	if (!data)
-		return (NULL);
+		return (1);
+	
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 	{
 		perror("miniRT: open");
 		free(data);
-		return (NULL);
+		return (1);
 	}
 	while ((line = get_next_line(fd)) != NULL)
 	{
@@ -51,54 +55,17 @@ static char	**alloc_data(ssize_t num_line, const char *path)
 			free(line);
 			continue ; // salta le righe vuote
 		}
-		// più righe utili del previsto → errore
-		// if (i >= num_line)
-		// {
-		// 	free(line);
-		// 	close(fd);
-		// 	free_array(data);
-		// 	return (NULL);
-		// }
 		chop_newline(line); // Rimuove New line finale e mette '0'
-		data[i++] = ft_strdup(line); // copia la riga utile
-		free(line);
+		/*-------	QUI POTREI INSERIRE I CONTROLLI DIRETTAMENTE SULLA LINEA APPENA LETTA -----------*/
+		/*---------- INVECE CHE COPIARLI NELLA MATRICE -------------- */
+		if (lex_scan_check_and_count(scene, line) == -1)
+			return(1);
 	}
 	if (close(fd) == -1)
 	{
 		perror("miniRT: close");
 		free_array(data);
-		return (NULL);
-	}
-	data[i] = NULL; // terminatore
-	return (data);
-}
-
-int	parse_file(const char *path, t_scene *scene)
-{
-	if (!path || !scene)
-	{
-		printf("parse_file: argomenti non validi\n");
 		return (1);
 	}
-	// potrei inserire direttamente qui il controllo del .rt
-	scene_reset(scene); // reset contatori
-	scene->data_file.num_line = count_line(0, path);
-	if (scene->data_file.num_line == -1)
-		return (1);
-	// vado a mettere i dati nella matrice
-	scene->data_file.data = alloc_data(scene->data_file.num_line, path);
-	if (!scene->data_file.data)
-		return (1);
-	/*
-	**
-	** ORA QUI METTERO UNA FUNZIONE CHE PRENDE DATA E LA T_SCENE E FA TUTTO
-	**
-	*/
-	// DEBUG
-	for (size_t i = 0; scene->data_file.data && scene->data_file.data[i]; i++)
-		printf("riga %zu: %s\n", i, scene->data_file.data[i]);
-	// funzione che serve per check unicità e che ci sia almeno un elemento
-	// if (check_startingscene(data) != 0)
-	//     return (1);
 	return (0);
 }

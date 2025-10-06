@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/04 20:28:14 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 21:13:04 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int		key_hook(int keycode, void *param);
 /* ================= Utils ================= */
 void	print_usage(const char *prog);
 void    free_array(char **arr);
-ssize_t	    count_line(ssize_t num_line, const char *path);
 void	chop_newline(char *s); // Rimuove /n finale
 
 /* ================= ft_skip_spaces ================= */
@@ -64,7 +63,11 @@ int ft_is_space_char(char c);
 /* ================= Check File ================= */
 int		has_rt_extension(const char *path); // controlla che abbia l'estensione .rt
 int     check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L, C e almeno una sp, cy, pl
+int     is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei token ammessi nel mandatory
 
 /* ================= Parse File ================= */
 int     parse_file(const char *path, t_scene *scene);
+
+/* ================= Lexer ================= */
+int lex_scan_check_and_count(t_scene *scene) ///* Prima scansione della matrice e aggiornamento contatori + duplicati A/C/L */
 #endif

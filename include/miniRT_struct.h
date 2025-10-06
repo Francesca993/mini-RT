@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/06 18:30:07 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 20:36:43 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINI_RT_STRUCT_H
 
 # include <stdbool.h>
-# include <sys/types.h> // per ssize_t
 
 /* --- Coordinate --- */
 typedef struct s_vector
@@ -97,13 +96,6 @@ typedef struct s_cylinder
 	t_color color; // 0..1
 }			t_cylinder;
 
-/* --- File data --- */
-typedef struct s_file
-{
-	ssize_t	num_line; //numero di righe del file
-	char **data; // matrice che conterrà tutto il file
-}			t_file;
-
 // --- scene container ---
 typedef struct s_scene
 {
@@ -119,7 +111,6 @@ typedef struct s_scene
 	int		n_spheres;
 	int		n_planes;
 	int		n_cylinders;
-	t_file	data_file;
 }			t_scene;
 
 #endif

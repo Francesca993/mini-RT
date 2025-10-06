@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:46:39 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 18:36:10 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,17 @@ int check_startingscene(t_scene *scene)
         return 1;
     }
     return 0; /*SUCCESSO */
+}
+
+/* Ritorna 1 se id è uno dei token ammessi nel mandatory */
+int is_valid_identifier(const char *id)
+{
+    if (!id || !*id) return 0;
+    if (ft_strcmp(id, "A") == 0)  return 1;
+    if (ft_strcmp(id, "C") == 0)  return 1;
+    if (ft_strcmp(id, "L") == 0)  return 1;
+    if (ft_strcmp(id, "sp") == 0) return 1;
+    if (ft_strcmp(id, "pl") == 0) return 1;
+    if (ft_strcmp(id, "cy") == 0) return 1;
+    return 0;
 }
