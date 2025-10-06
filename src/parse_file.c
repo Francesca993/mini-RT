@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 20:06:43 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 18:30:30 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@ static void	scene_reset(t_scene *scene)
 	scene->n_spheres = 0;
 	scene->n_planes = 0;
 	scene->n_cylinders = 0;
+	scene->data_file.data = NULL;
+	scene->data_file.num_line = 0;
+	
 	return ;
 }
 /*-- Copia il file fd dentro una matrice, saltando righe vuote e spazi --*/
@@ -72,10 +75,6 @@ static char	**alloc_data(ssize_t num_line, const char *path)
 
 int	parse_file(const char *path, t_scene *scene)
 {
-	char	**data;
-
-	ssize_t num_line; // Contatore del numero di riga (uso ssize_t perche consente di fare -1 per l'errore)
-	data = NULL;
 	if (!path || !scene)
 	{
 		printf("parse_file: argomenti non validi\n");
@@ -83,12 +82,12 @@ int	parse_file(const char *path, t_scene *scene)
 	}
 	// potrei inserire direttamente qui il controllo del .rt
 	scene_reset(scene); // reset contatori
-	num_line = count_line(0, path);
-	if (num_line == -1)
+	scene->data_file.num_line = count_line(0, path);
+	if (scene->data_file.num_line == -1)
 		return (1);
 	// vado a mettere i dati nella matrice
-	data = alloc_data(num_line, path);
-	if (!data)
+	scene->data_file.data = alloc_data(scene->data_file.num_line, path);
+	if (!scene->data_file.data)
 		return (1);
 	/*
 	**
@@ -96,8 +95,8 @@ int	parse_file(const char *path, t_scene *scene)
 	**
 	*/
 	// DEBUG
-	for (size_t i = 0; data && data[i]; i++)
-		printf("riga %zu: %s\n", i, data[i]);
+	for (size_t i = 0; scene->data_file.data && scene->data_file.data[i]; i++)
+		printf("riga %zu: %s\n", i, scene->data_file.data[i]);
 	// funzione che serve per check unicità e che ci sia almeno un elemento
 	// if (check_startingscene(data) != 0)
 	//     return (1);
