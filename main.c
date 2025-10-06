@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 10:51:18 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/04 15:56:05 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 22:44:28 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ int	main(int argc, char **argv)
         perror("calloc");
         return (1);
     }
-    //Al momento il parser legge il file rt e manda le righe non vuote in una matrice
-    //su cui poi farò i vari test
 	if (parse_file(argv[1], scene) != 0) 
 	{
         fprintf(stderr, "Parsing fallito per '%s'\n", argv[1]);

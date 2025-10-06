@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/06 21:13:04 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 22:42:49 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,5 @@ int     is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei toke
 int     parse_file(const char *path, t_scene *scene);
 
 /* ================= Lexer ================= */
-int lex_scan_check_and_count(t_scene *scene) ///* Prima scansione della matrice e aggiornamento contatori + duplicati A/C/L */
+int lex_scan_check_and_count(t_scene *scene, char *line); ///* Prima scansione della matrice e aggiornamento contatori + duplicati A/C/L */
 #endif

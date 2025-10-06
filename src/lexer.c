@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/06 21:51:11 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 22:59:36 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,25 @@
 // Ritorna: id allocato (max 2 char + '\0') da free()-are.
 // *rest_out: punta al resto della riga (dopo l'id e gli spazi).
 // Non modifica 'line'.
-static char *borrow_first_token(char *line, char **rest_out)
+static char *check_first_token(char *line, char **rest_out)
 {
-    char *start;
     char	*id;
+    int i;
     
-    id = ft_calloc(10, sizeof(char)); // max 2 char + terminatore
+    i = 0;
+    id = ft_calloc(10, sizeof(char)); // max 10 char (per sicurezza anche se al massimo sono due, per essere sicura di non tagliare qualcosa di piu lungo + terminatore
 	if (!id)
 		return (NULL);
      if (rest_out) 
         *rest_out = NULL;
     
-    /* Skippa spazi iniziali (già eviti righe vuote prima, ma è robusto) */
+    /* Skippa spazi iniziali */
     while (*line && ft_is_space_char(*line)) 
         line++;
     /* token = [^space/tab]...  */
 	// copia massimo 10 caratteri finché non trova spazio o fine riga
-	while (*line && !ft_is_space_char(*p) && i < 9)
-		id[i++] = *p++;
+	while (*line && !ft_is_space_char(*line) && i < 9)
+		id[i++] = *line++;
     id[i] = '\0'; // terminatore già garantito da calloc, ma chiudiamo
 	if (!is_valid_identifier(id))
     /* is_valid_identifier Ritorna 1 se id è uno dei token ammessi nel mandatory */
@@ -40,17 +41,19 @@ static char *borrow_first_token(char *line, char **rest_out)
 		fprintf(stderr, "Error\nIdentificatore non valido\n");
 		return (NULL);
 	}
-    if (*line)
-    {
-        *line = '\0';       /* termina il token in place */
-        line++;             /* spostati dopo il terminatore */
-    }
+    //Secondo me non devo toccare la line qui per eitare di free(are) male dopo
+    // if (*line)
+    // {
+    //     *line = '\0';       /* termina il token in place */
+    //     line++;             /* spostati dopo il terminatore */
+    // }
     // salta gli spazi dopo l'id e restituisci il resto
     while (*line && ft_is_space_char(*line))
         line++;
-    if (rest_out)
+    // if (rest_out)
+    if (*line)
         *rest_out = line;
-    returtn (id);
+    return (id);
 }
 
 /*
@@ -73,8 +76,8 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 		return (1);
 	while (line[i] != '\0')
 	{
-		id = borrow_first_token(line, &rest_out);
         rest_out = NULL;
+		id = check_first_token(line, &rest_out);
 		if (!id)
 			return (1);
 		if (ft_strcmp(id, "A") == 0)
@@ -83,8 +86,7 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 			if (scene->n_ambient > 1)
 			{
 				fprintf(stderr,
-					"Error\nAmbiente 'A' definito più di una volta (riga
-					%zu)\n", i + 1);
+					"Error\nAmbiente 'A' definito più di una volta");
 				return (1);
 			}
 			scene->amb.present = true;
@@ -95,8 +97,7 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 			if (scene->n_camera > 1)
 			{
 				fprintf(stderr,
-					"Error\nCamera 'C' definita più di una volta (riga %zu)\n",
-					i + 1);
+					"Error\nCamera 'C' definita più di una volta\n");
 				return (1);
 			}
 			scene->cam.present = true;
@@ -106,8 +107,7 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 			scene->n_lights++;
 			if (scene->n_lights > 1)
 			{
-				fprintf(stderr, "Error\nLuce 'L' definita più di una volta (riga
-					%zu)\n", i + 1);
+				fprintf(stderr, "Error\nLuce 'L' definita più di una volta \n");
 				return (1);
 			}
 			scene->light.present = true;
