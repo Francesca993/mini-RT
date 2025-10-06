@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:45:06 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 20:27:58 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void free_array(char **arr)
 }
 /*Conta le righe del fd saltando quelle vuote, mi serve all inzio per creare una 
 matrice dati dentro cui "copiare" solo i dati utili del FD*/
-int	count_line(size_t num_line, const char *path)
+ssize_t	count_line(ssize_t num_line, const char *path)
 {
 	char	*line;
 	int 	fd;

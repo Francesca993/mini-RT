@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 12:03:32 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 20:34:53 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,13 @@
 # include <stdbool.h>
 
 /* --- Coordinate --- */
-typedef struct s_vec3
+typedef struct s_vector
 {
 	double	x;
 	double	y;
 	double	z;
 	//double	w;
-}			t_vec3;
+}			t_vector;
 
 /* --- Colori --- */
 // Colori interni in spazio lineare [0..1]
@@ -46,8 +46,8 @@ typedef struct s_ambient
 // Camera (C pos, dir normalizzata, FOV in gradi [0..180])
 typedef struct s_camera
 {
-	t_vec3	pos;
-	t_vec3 dir;     // normalizzata
+	t_vector	pos;
+	t_vector dir;     // normalizzata
 	double fov_deg; // (0,180)
 	bool	present;
 }			t_camera;
@@ -56,7 +56,7 @@ typedef struct s_camera
 // Light (L pos, intensità [0..1], colore)
 typedef struct s_light
 {
-	t_vec3	pos;
+	t_vector	pos;
 	double intensity; // [0..1]
 	t_color color;    // normalizzato 0..1
 	bool	present;
@@ -73,7 +73,7 @@ typedef enum e_objtype
 /* --- Sphere --- */
 typedef struct s_sphere
 {
-	t_vec3 center; // centro
+	t_vector center; // centro
 	double radius; // diametro/2, precomputato dal parser
 	t_color color; // 0..1
 }			t_sphere;
@@ -81,16 +81,16 @@ typedef struct s_sphere
 /* --- Plane --- */
 typedef struct s_plane
 {
-	t_vec3 point;  // un punto sul piano
-	t_vec3 normal; // normalizzata
+	t_vector point;  // un punto sul piano
+	t_vector normal; // normalizzata
 	t_color color; // 0..1
 }			t_plane;
 
 /* --- Cylinder --- */
 typedef struct s_cylinder
 {
-	t_vec3 base;   // punto base lungo l'asse (convenz.
-	t_vec3 axis;   // direzione normalizzata
+	t_vector base;   // punto base lungo l'asse (convenz.
+	t_vector axis;   // direzione normalizzata
 	double radius; // diametro/2
 	double height; // altezza finita
 	t_color color; // 0..1

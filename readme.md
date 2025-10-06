@@ -2,6 +2,11 @@ Allora mi sono basata sul subject e ho creato per ogni elemento una struttura, e
 All'inizio del mio main c'è una funzione di check sul file, che sia .rt. vorrei poi implementare una funzione unica che comprenderà anche quella, a cui si passerà l'fd e il file e lo controllerà prima di aprirlo. ma per il momento l'ho messa li. 
 ora sto stilando una lista completa di tutti i check da fare mentre carico il file e di tutto cio che devo controllare secondo il subject.
 
+**Fatto e da fare:**
+-> ho fatto una funzione che legge il file con get_next_line, una sola volta er lo butta dentro una matrice dati, saltando gia le righe vuote. cosi evito di andare a leggere piu volte il file con gnl, anche se potrebbe rallentare il programma con file troppo grossi.
+-> da qui devo andare a fare tutti i check: il primo sono le presenze obbligatorie. 
+-> poi devo fare un lexer che prenda questa matrice e la divida in token, li associ ai type definiti, e ne controlli la validita
+
 Estensione .rt già verificata per il momento nel main ✅
 
 Righe vuote e spazi: puoi ignorare righe vuote o solo spazi/tab. Gli elementi sono separati da uno o più spazi/tabs. -> fare una funzione che ignora righe e spazi nelle utils

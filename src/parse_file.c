@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:48:42 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/04 20:06:43 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ static void	scene_reset(t_scene *scene)
 	return ;
 }
 /*-- Copia il file fd dentro una matrice, saltando righe vuote e spazi --*/
-static char	**alloc_data(size_t num_line, const char *path)
+static char	**alloc_data(ssize_t num_line, const char *path)
 {
 	char	**data;
 	char	*line;
-	size_t	i;
+	ssize_t	i;
 	int		fd;
 
 	i = 0;
@@ -53,7 +53,7 @@ static char	**alloc_data(size_t num_line, const char *path)
 		// {
 		// 	free(line);
 		// 	close(fd);
-		// 	free_strarray(data);
+		// 	free_array(data);
 		// 	return (NULL);
 		// }
 		chop_newline(line); // Rimuove New line finale e mette '0'
@@ -74,7 +74,7 @@ int	parse_file(const char *path, t_scene *scene)
 {
 	char	**data;
 
-	size_t num_line; // Contatore del numero di riga
+	ssize_t num_line; // Contatore del numero di riga (uso ssize_t perche consente di fare -1 per l'errore)
 	data = NULL;
 	if (!path || !scene)
 	{
@@ -84,7 +84,7 @@ int	parse_file(const char *path, t_scene *scene)
 	// potrei inserire direttamente qui il controllo del .rt
 	scene_reset(scene); // reset contatori
 	num_line = count_line(0, path);
-	if (num_line == (size_t)-1)
+	if (num_line == -1)
 		return (1);
 	// vado a mettere i dati nella matrice
 	data = alloc_data(num_line, path);
