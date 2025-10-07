@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 23:12:05 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 16:05:09 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 21:56:55 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	parse_ambient_line(t_scene *scene, char *rest_of_line)
 		fprintf(stderr, "Error\nParametro mancante per 'A'\n");
 		return (1);
 	}
-	if (scene->amb.present)
+	if (scene->amb.present == true)
 	{
 		fprintf(stderr, "Error\nAmbiente 'A' definito più di una volta\n");
 		return (1);
@@ -82,7 +82,7 @@ int	parse_ambient_line(t_scene *scene, char *rest_of_line)
 	if (*cursor != '\0')
 	{
 		fprintf(stderr, "Error\nToken extra dopo il colore in 'A'\n");
-		return (1);
+		return 1;
 	}
 
 	/* 5) Salva nella scena (normalizza il colore in [0..1]) */

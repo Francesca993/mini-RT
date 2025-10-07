@@ -6,20 +6,20 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/07 14:28:03 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 21:36:36 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RT_H
 # define RT_H
 
+# include "../Libft/libft.h"
 # include "miniRT_struct.h"
 # include <math.h>
 # include <stdbool.h>
 # include <stddef.h>
 # include <stdint.h>
 # include <stdio.h>
-# include "../Libft/libft.h"
 
 /* ================= Config ================= */
 # ifndef WIDTH
@@ -48,37 +48,43 @@
 # endif
 
 /* ================= Hook ================= */
-int		close_hook(void *param);
-int		key_hook(int keycode, void *param);
+int			close_hook(void *param);
+int			key_hook(int keycode, void *param);
 
 /* ================= Utils ================= */
-void	print_usage(const char *prog);
-void	chop_newline(char *s); // Rimuove /n finale
-void	scene_free(t_scene *scene); // Libera la Union, gli objects della t_scene
-int     parse_double(const char **line, double *out);
-int     parse_rgb(const char **input_ptr, int *out_red, int *out_green, int *out_blue);
-const char *skip_spaces(const char *p);
+void		print_usage(const char *prog);
+void	    chop_newline(char *s);      // Rimuove /n finale
+void	    scene_free(t_scene *scene); // Libera la Union,gli objects della t_scene
+int			parse_double(const char **line, double *out);
+int			parse_rgb(const char **input_ptr, int *out_red, int *out_green,
+				int *out_blue);
+const char	*skip_spaces(const char *p);
 
 /* ================= Debug ================= */
-void debug_print_scene(const t_scene *scene_ptr, const char *title);
+void		debug_print_scene(const t_scene *scene_ptr, const char *title);
 
 /* ================= Free ================= */
-void    free_array(char **arr);
+void		free_array(char **arr);
+void		scene_reset(t_scene *scene);
+int			print_err_msg(const char *msg);
 
 /* ================= ft_skip_spaces ================= */
-int ft_is_blank(const char *s);
-int ft_is_space_char(char c);
-const char *skip_spaces(const char *p);
+int			ft_is_blank(const char *s);
+int			ft_is_space_char(char c);
+const char	*skip_spaces(const char *p);
 
 /* ================= Check File ================= */
-int		has_rt_extension(const char *path); // controlla che abbia l'estensione .rt
-int     check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L, C e almeno una sp, cy, pl
-int     is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei token ammessi nel mandatory
-int     parse_ambient_line(t_scene *scene, char *rest_of_line);
+int	has_rt_extension(const char *path);  // controlla che abbia l'estensione .rt
+int	check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L,
+                                        // C e almeno una sp, cy, pl
+int	is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei token ammessi nel mandatory
+int			parse_ambient_line(t_scene *scene, char *rest_of_line);
 
 /* ================= Parse File ================= */
-int     parse_file(const char *path, t_scene *scene);
+int			parse_file(const char *path, t_scene *scene);
 
 /* ================= Lexer ================= */
-int lex_scan_check_and_count(t_scene *scene, char *line); ///* Prima scansione della matrice e aggiornamento contatori + duplicati A/C/L */
+int	lex_scan_check_and_count(t_scene *scene, char *line);
+		///* Prima scansione della matrice e aggiornamento contatori
+		//+ duplicati A/C/L */
 #endif

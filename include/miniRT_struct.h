@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 14:18:39 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 21:26:39 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef struct s_vector
 	double	x;
 	double	y;
 	double	z;
-	//double	w;
+	double	w;
 }			t_vector;
 
 /* --- Colori --- */
