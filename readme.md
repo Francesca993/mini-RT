@@ -110,10 +110,10 @@ Duplicati A/C/L: se trovi una seconda istanza → errore.
 - come costruire gli oggetti nel parsing,
 - come userarli nel rendering.
 
-🧩 1. Strutture dati principali
+### 🧩 1. Strutture dati principali
 Queste vanno nel tuo miniRT_struct.h o in un file tipo scene.h.
 
- ```
+```
 typedef enum e_object_type
 {
 	OBJ_SPHERE,
@@ -172,4 +172,134 @@ typedef struct s_scene
 	size_t		object_cap;   // capacità allocata
 }	t_scene;
 
- ```
+```
+### ⚙️ 2. Funzioni per gestire la scena (array dinamico)
+Queste funzioni servono al parser per aggiungere oggetti man mano che li legge dal file .rt.
+
+```
+#include <stdlib.h>
+
+static int	scene_reserve_capacity(t_scene *scene, size_t new_count)
+{
+	if (new_count <= scene->object_cap)
+		return (1);
+	size_t	new_capacity = scene->object_cap ? scene->object_cap * 2 : 8;
+	while (new_capacity < new_count)
+		new_capacity *= 2;
+	void	*new_data = realloc(scene->objects, new_capacity * sizeof(t_object));
+	if (!new_data)
+		return (0);
+	scene->objects = new_data;
+	scene->object_cap = new_capacity;
+	return (1);
+}
+
+int	scene_add_object(t_scene *scene, t_object new_object)
+{
+	if (!scene_reserve_capacity(scene, scene->object_count + 1))
+		return (0);
+	scene->objects[scene->object_count++] = new_object;
+	return (1);
+}
+
+void	scene_free(t_scene *scene)
+{
+	free(scene->objects);
+	scene->objects = NULL;
+	scene->object_count = 0;
+	scene->object_cap = 0;
+}
+```
+### 📄 3. Parsing di un oggetto (esempio concreto)
+Quando il parser legge una riga del file .rt, riconosce il tipo (sp, pl, cy) e costruisce il t_object corrispondente.
+
+**Esempio: riga di sfera**
+
+```
+sp 0,0,20.6 12.6 255,0,0
+
+
+void	parse_sphere_line(t_scene *scene, const char *line)
+{
+	t_object	new_object;
+
+	new_object.type = OBJ_SPHERE;
+
+	// supponiamo che tu abbia già funzioni parse_vec3 e parse_color
+	const char *cursor = line;
+
+	parse_vec3(&cursor, &new_object.as.sphere.center);
+	parse_double(&cursor, &new_object.as.sphere.diameter);
+	parse_color(&cursor, &new_object.as.sphere.color);
+
+	scene_add_object(scene, new_object);
+}
+```
+
+**Esempio: riga di piano**
+
+```
+pl 0,0,-10 0,1,0 0,255,0
+
+void	parse_plane_line(t_scene *scene, const char *line)
+{
+	t_object	new_object;
+
+	new_object.type = OBJ_PLANE;
+	const char *cursor = line;
+
+	parse_vec3(&cursor, &new_object.as.plane.point);
+	parse_vec3(&cursor, &new_object.as.plane.normal);
+	parse_color(&cursor, &new_object.as.plane.color);
+
+	scene_add_object(scene, new_object);
+}
+```
+**Esempio: riga di cilindro**
+
+```
+cy 50,0,20 0,0,1 14.2 21.42 10,0,255
+
+void	parse_cylinder_line(t_scene *scene, const char *line)
+{
+	t_object	new_object;
+
+	new_object.type = OBJ_CYLINDER;
+	const char *cursor = line;
+
+	parse_vec3(&cursor, &new_object.as.cylinder.center);
+	parse_vec3(&cursor, &new_object.as.cylinder.axis);
+	parse_double(&cursor, &new_object.as.cylinder.diameter);
+	parse_double(&cursor, &new_object.as.cylinder.height);
+	parse_color(&cursor, &new_object.as.cylinder.color);
+
+	scene_add_object(scene, new_object);
+}
+```
+
+### 🌈 4. Uso nel rendering
+Durante il ray tracing, scorrerai l’array scene->objects per trovare l’intersezione più vicina.
+```
+t_hit_record	find_nearest_intersection(t_ray ray, const t_scene *scene)
+{
+	t_hit_record	best_hit = { .t = INFINITY };
+	for (size_t i = 0; i < scene->object_count; i++)
+	{
+		const t_object *obj = &scene->objects[i];
+		t_hit_record	hit;
+
+		if (obj->type == OBJ_SPHERE)
+			hit = intersect_sphere(ray, &obj->as.sphere);
+		else if (obj->type == OBJ_PLANE)
+			hit = intersect_plane(ray, &obj->as.plane);
+		else if (obj->type == OBJ_CYLINDER)
+			hit = intersect_cylinder(ray, &obj->as.cylinder);
+		else
+			continue;
+
+		if (hit.t > 0 && hit.t < best_hit.t)
+			best_hit = hit;
+	}
+	return (best_hit);
+}
+```
