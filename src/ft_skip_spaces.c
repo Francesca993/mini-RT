@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 13:55:12 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/04 15:26:30 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 23:29:22 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,12 @@ int ft_is_blank(const char *s)
         i++;
     }
     return 1;
+}
+
+/* Salta gli spazi */
+char *skip_spaces(const char *p)
+{
+    while (*p && ft_is_space_char(*p))
+        p++;
+    return p;
 }

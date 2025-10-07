@@ -104,3 +104,72 @@ Valori fuori range (colori, ratio, FOV, dimensioni non positive): errore.
 
 Duplicati A/C/L: se trovi una seconda istanza → errore. 
 
+# SPIEGAZIONE T_UNION
+
+- come definire le struct,
+- come costruire gli oggetti nel parsing,
+- come userarli nel rendering.
+
+🧩 1. Strutture dati principali
+Queste vanno nel tuo miniRT_struct.h o in un file tipo scene.h.
+
+ ```
+typedef enum e_object_type
+{
+	OBJ_SPHERE,
+	OBJ_PLANE,
+	OBJ_CYLINDER
+}	t_object_type;
+
+/* ───────────── Oggetti geometrici ───────────── */
+
+typedef struct s_sphere
+{
+	t_vec3	center;
+	double	diameter;
+	t_color	color;
+}	t_sphere;
+
+typedef struct s_plane
+{
+	t_vec3	point;
+	t_vec3	normal;
+	t_color	color;
+}	t_plane;
+
+typedef struct s_cylinder
+{
+	t_vec3	center;
+	t_vec3	axis;
+	double	diameter;
+	double	height;
+	t_color	color;
+}	t_cylinder;
+
+/* ───────────── Contenitore generico ───────────── */
+
+typedef struct s_object
+{
+	t_object_type	type;   // serve per capire cosa contiene il union
+	union
+	{
+		t_sphere	sphere;
+		t_plane		plane;
+		t_cylinder	cylinder;
+	}	as;                  // "as" = as.sphere / as.plane / as.cylinder
+}	t_object;
+
+/* ───────────── Scena completa ───────────── */
+
+typedef struct s_scene
+{
+	t_camera	camera;
+	t_light		light;
+	t_ambient	ambient;
+
+	t_object	*objects;     // array dinamico di oggetti
+	size_t		object_count; // quanti oggetti totali
+	size_t		object_cap;   // capacità allocata
+}	t_scene;
+
+ ```

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/06 22:42:49 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/06 23:29:38 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	chop_newline(char *s); // Rimuove /n finale
 /* ================= ft_skip_spaces ================= */
 int ft_is_blank(const char *s);
 int ft_is_space_char(char c);
+char *skip_spaces(const char *p);
 
 /* ================= Check File ================= */
 int		has_rt_extension(const char *path); // controlla che abbia l'estensione .rt
