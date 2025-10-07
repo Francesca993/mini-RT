@@ -210,6 +210,38 @@ void	scene_free(t_scene *scene)
 	scene->object_cap = 0;
 }
 ```
+**scene_reserve_capacity**
+Garantisce che scene->objects abbia spazio sufficiente per contenere almeno new_count elementi (capacità). Se non basta, rialloca (con realloc) aumentando la capacità.
+
+- Controllo sufficienza: Se la capacità attuale (object_cap) è già ≥ new_count, non serve fare nulla.
+- Crescita esponenziale:
+    - Se l’array è vuoto, parte da 8 (scelta comune come capacità iniziale).
+    - Altrimenti raddoppia finché non raggiunge almeno new_count.
+    - Il raddoppio è una strategia classica per avere push amortizzato O(1) (cioè, molto veloce in media).
+- Riallocazione:
+    - realloc ridimensiona il blocco: se può allargarlo “in place”, lo fa; altrimenti copia i vecchi dati in un nuovo blocco e libera il precedente.
+    - Se fallisce (NULL), non tocchiamo scene->objects (perché stiamo usando una variabile temporanea new_data), quindi niente leak e l’array rimane valido com’era.
+    - Se va bene, aggiorniamo il puntatore e la nuova capacità.
+
+Esempio pratico: come “cresce” la capacità
+Partenza: object_cap=0, object_count=0.
+1° push → new_count=1
+new_capacity passa da 0 a 8 → realloc(8 * sizeof(t_object)) → object_cap=8, object_count=1.
+Push fino a 8 → nessuna riallocazione (cap=8).
+9° push → new_count=9
+cap 8 non basta: raddoppia → 16 → realloc(16 * sizeof(...)) → object_cap=16, object_count=9.
+E così via: 32, 64, 128…
+Questo pattern limita il numero di riallocazioni e rende le scene_add_object molto economiche.
+
+**scene_free**
+
+- Libera la memoria del vettore.
+- Azzera puntatore, count e cap per lasciare la struttura in stato consistente e riutilizzabile (o sicura da free-are di nuovo).
+Nota:
+free(NULL) è sicuro, quindi puoi chiamarla anche se non hai mai aggiunto oggetti.
+Se in futuro i tuoi t_object contenessero risorse allocate internamente, dovresti prima iterare sugli oggetti e rilasciare le risorse interne, poi liberare l’array. Con il layout attuale (solo valori), non serve.
+
+
 ### 📄 3. Parsing di un oggetto (esempio concreto)
 Quando il parser legge una riga del file .rt, riconosce il tipo (sp, pl, cy) e costruisce il t_object corrispondente.
 
