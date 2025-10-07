@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 11:18:25 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 16:02:00 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	parse_file(const char *path, t_scene *scene)
 		}
 		chop_newline(line); // Rimuove New line finale e mette '0'
 		/*-------CONTROLLI DIRETTAMENTE SULLA LINEA APPENA LETTA -----------*/
-		if (lex_scan_check_and_count(scene, line) == -1)
+		if (lex_scan_check_and_count(scene, line) == 1)
 			return(1);
 	}
 	if (close(fd) == -1)

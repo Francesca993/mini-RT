@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 10:51:18 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/06 22:44:28 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 16:06:07 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,11 @@ int	main(int argc, char **argv)
 	{
         fprintf(stderr, "Parsing fallito per '%s'\n", argv[1]);
         free(scene);
-        return 1;
+        return (1);
     }
-	//     // Per ora solo feedback:
-    // printf("OK: A=%d C=%d L=%d sp=%d pl=%d cy=%d\n",
-    //        scene->n_ambient, scene->n_camera, scene->n_lights,
-    //        scene->n_spheres, scene->n_planes, scene->n_cylinders);
-
     // TODO: render / mlx init ...
-
+    if (scene != NULL)
+        debug_print_scene(scene, "DEBUG SULLA FINE DEL MAIN");
     free(scene);
-    return 0;
+    return (0);
 }

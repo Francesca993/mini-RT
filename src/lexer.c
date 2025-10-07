@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 14:30:03 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 14:40:19 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,15 +85,6 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 			return (1);
 		if (ft_strcmp(id, "A") == 0)
 		{
-			/* verifica duplicato e parsing completo dell'ambiente */
-			//è gia dentro parse_ambient()
-			// if (scene->amb.present)
-			// {
-			// 	fprintf(stderr,
-			// 		"Error\nAmbiente 'A' definito più di una volta\n");
-			// 	free(id);
-			// 	return (1);
-			// }
 			if (parse_ambient_line(scene, rest_out) != 0)
 			{
 				free(id);
