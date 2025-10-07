@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 11:36:36 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 14:30:03 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,15 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 		if (ft_strcmp(id, "A") == 0)
 		{
 			/* verifica duplicato e parsing completo dell'ambiente */
-			if (scene->amb.present)
-			{
-				fprintf(stderr,
-					"Error\nAmbiente 'A' definito più di una volta\n");
-				free(id);
-				return (1);
-			}
-			if (parse_ambient_line(scene, rest_of_line) != 0)
+			//è gia dentro parse_ambient()
+			// if (scene->amb.present)
+			// {
+			// 	fprintf(stderr,
+			// 		"Error\nAmbiente 'A' definito più di una volta\n");
+			// 	free(id);
+			// 	return (1);
+			// }
+			if (parse_ambient_line(scene, rest_out) != 0)
 			{
 				free(id);
 				return (1);
@@ -145,5 +146,8 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 			return (1);
 		}
 		free(id);
-		return (0);
+		// --------- DEBUG   ---------------
+		debug_print_scene(scene, "DEBUG SUL LEXER");
 	}
+	return (0);
+}

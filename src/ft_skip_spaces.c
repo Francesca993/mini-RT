@@ -33,9 +33,9 @@ int ft_is_blank(const char *s)
 }
 
 /* Salta gli spazi */
-char *skip_spaces(const char *p)
+const char *skip_spaces(const char *p)
 {
-    while (*p && ft_is_space_char(*p))
-        p++;
-    return p;
+	while (*p && ft_is_space_char(*p))
+		p++;
+	return p;
 }

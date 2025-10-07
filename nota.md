@@ -26,3 +26,6 @@
 
 se con ft_strcmp dovesse trovare una "A":
 ### parse_ambient_line;
+
+**int	parse_double(const char **line, double *out)**  -> Helper che estrae il double dalla stringa
+**parse_rgb** -> Helper che estrae l'RGB dalla stringa

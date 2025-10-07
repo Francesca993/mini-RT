@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 10:53:25 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 14:18:39 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINI_RT_STRUCT_H
 
 # include <stdbool.h>
+ #include <stddef.h>
 
 /* --- Coordinate --- */
 typedef struct s_vector
@@ -100,7 +101,7 @@ typedef struct s_cylinder
 
 typedef struct s_object
 {
-	t_object_type	type;   // serve per capire cosa contiene il union
+	t_objtype	type;   // serve per capire cosa contiene il union
 	union
 	{
 		t_sphere	sphere;

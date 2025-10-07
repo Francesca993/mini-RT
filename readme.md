@@ -12,12 +12,13 @@ Righe vuote e spazi: puoi ignorare righe vuote o solo spazi/tab. Gli elementi so
 
 Identificatori validi: solo questi token a inizio riga sono permessi nel mandatory: A, C, L, sp, pl, cy. Qualsiasi altro identificatore → errore di parsing.
 
-✅ Presenze obbligatorie e unicità:
+✅ **Presenze obbligatorie e unicità:**
 A una sola volta.
 C una sola volta.
 L una sola volta nel mandatory (nel bonus potranno essere più luci).
 
-✅ Almeno un oggetto (sp/pl/cy) deve essere presente per avere qualcosa da renderizzare (se non c’è nulla → errore logico di scena vuota).
+✅ **Almeno un oggetto (sp/pl/cy)**
+ deve essere presente per avere qualcosa da renderizzare (se non c’è nulla → errore logico di scena vuota).
 
 Formato dei gruppi con virgole: 
 - coordinate/orientazioni/colori sono sempre nel formato x,y,z e R,G,B 
@@ -55,43 +56,42 @@ cy diameter > 0 e height > 0.
 Ordine dei valori per ogni elemento (mandatory)
 L’ordine deve essere esattamente questo. Se l’ordine non è rispettato o manca/un extra parametro → errore di parsing.
 
-Ambient (A)
+**Ambient (A)**
 A ratio R,G,B
 ratio ∈ [0,1]
 R,G,B interi 0–255
 
-Camera (C)
+**Camera (C)**
 C x,y,z nx,ny,nz FOV
 x,y,z posizione
 nx,ny,nz direzione (norm. in [-1,1], ≠(0,0,0))
 FOV in gradi, 0<FOV<180
 
-Light (L)
+**Light (L)**
 L x,y,z brightness R,G,B
 x,y,z posizione
 brightness ∈ [0,1]
 R,G,B interi 0–255
 
-Sphere (sp)
+**Sphere (sp)**
 sp x,y,z diameter R,G,B
 x,y,z centro
 diameter > 0
 R,G,B interi 0–255
 
-Plane (pl)
+**Plane (pl)**
 pl x,y,z nx,ny,nz R,G,B
 x,y,z un punto sul piano
 nx,ny,nz normale (norm. in [-1,1], ≠(0,0,0))
 R,G,B interi 0–255
 
-Cylinder (cy)
+**Cylinder (cy)**
 cy x,y,z nx,ny,nz diameter height R,G,B
 x,y,z punto base (o centro, dipende dalla tua convenzione, ma deve essere consistente)
 nx,ny,nz asse (norm. in [-1,1], ≠(0,0,0))
 diameter > 0
 height > 0
 R,G,B interi 0–255
-
 
 Cosa succede se…
 Ordine sbagliato: es. C FOV x,y,z nx,ny,nz → errore (riga rifiutata).
@@ -335,3 +335,32 @@ t_hit_record	find_nearest_intersection(t_ray ray, const t_scene *scene)
 	return (best_hit);
 }
 ```
+
+# Flusso di azione:
+
+**Dal main:**
+-> Alloco memoria per la t_scene
+-> Controllo che il file abbuia effettivamente l'estensione .rt (Valuterò dove spostarla in seguito).
+-> parte **parse_file** che prende il puntatore al fd e la t_scene.
+
+### Parse_file
+-> parse_file inizializza subito la t_scene.
+-> Apre il file con Open.
+-> Legge la riga con GNL:
+    - se è vuota la salta.
+    - Altrimenti toglie il '\n' finale e mette '\0', e la pass a **lex_scan_check_and_count**.  
+
+### NB: Assicurarmi di aggiungere al punto giusto credo qui, la funzione che in caso di errore libera correttamente tutta la memoria allocata.
+
+### lex_scan_check_and_count
+
+-> Prende la t_scene e la riga appena letta.
+-> Prende la rioga e fa il primo controllo sul primo pezzo di token, ovvero l'ID, quello che dovrebbe identificare iul parametro con **check_first_token**, che fa due cose importanti:
+    - Salta eventuali spazi iniziali e prende il primi caratteri.
+    - prende i primi max 10 caratteri fino al prossimio spazio, e verifica che siano identificatori validi per i requisiti con **is_valid_identifier**.
+        - Se lo sono: restituisce l'ID, e nel rest_out il puntatore al continuo della line.
+        - Se NON lo sono NULL e quindi errore: IOdentificatorenon valido.
+-> Se **check_first_token** va a buon fine a questo punto, sto implementando le funzioni che a seconda dell'id riconosciuto allocheranno il resto della roga mentre faranno gia anche i check che i valori siano corretti e nei range per ogni elemento, che non ci siano piu elementi la dove non dovessero essercene.
+
+se con ft_strcmp dovesse trovare una "A":
+### parse_ambient_line;
