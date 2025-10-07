@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 23:12:05 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 00:03:33 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 11:12:47 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_ambient
 }	t_ambient;
 
 */
-int	check_ambient(t_scene *scene, char *line)
+int	check_ambient(t_scene *scene, char *rest_out_line)
 {
 	const char	*p;
 	double		ratio;

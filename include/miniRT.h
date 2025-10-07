@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/06 23:29:38 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 11:13:26 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		key_hook(int keycode, void *param);
 void	print_usage(const char *prog);
 void    free_array(char **arr);
 void	chop_newline(char *s); // Rimuove /n finale
+void	scene_free(t_scene *scene); // Libera la Union, gli objects della t_scene
 
 /* ================= ft_skip_spaces ================= */
 int ft_is_blank(const char *s);
@@ -65,6 +66,7 @@ char *skip_spaces(const char *p);
 int		has_rt_extension(const char *path); // controlla che abbia l'estensione .rt
 int     check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L, C e almeno una sp, cy, pl
 int     is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei token ammessi nel mandatory
+int     check_ambient(t_scene *scene, char *rest_out_line);
 
 /* ================= Parse File ================= */
 int     parse_file(const char *path, t_scene *scene);

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/06 20:36:43 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/07 10:53:25 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,21 @@ typedef struct s_cylinder
 	t_color color; // 0..1
 }			t_cylinder;
 
-// --- scene container ---
+/* ───────────── Contenitore generico ───────────── */
+
+typedef struct s_object
+{
+	t_object_type	type;   // serve per capire cosa contiene il union
+	union
+	{
+		t_sphere	sphere;
+		t_plane		plane;
+		t_cylinder	cylinder;
+	}	as;                  // "as" = as.sphere / as.plane / as.cylinder
+}	t_object;
+
+
+/* ───────────── Scena ───────────── */
 typedef struct s_scene
 {
 	// istanze reali (da riempire via parser)
@@ -111,6 +125,9 @@ typedef struct s_scene
 	int		n_spheres;
 	int		n_planes;
 	int		n_cylinders;
+	t_object	*objects;     // array dinamico di oggetti
+	size_t		object_count; // quanti oggetti totali
+	size_t		object_cap;   // capacità allocata
 }			t_scene;
 
 #endif
