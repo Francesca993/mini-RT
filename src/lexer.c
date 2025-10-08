@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 22:09:56 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 11:04:06 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,31 +79,28 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 		if (parse_ambient_line(scene, rest_out) != 0)
 		{
 			free(id);
-			return (1);
+			return (1); // Messaggi di errore tutti dentro parse_ambient_line
 		}
-		scene->n_ambient += 1;
 	}
 	else if (ft_strcmp(id, "C") == 0)
 	{
-		scene->n_camera += 1;
 		if (scene->n_camera > 1)
 		{
-			fprintf(stderr,
-				"Error\nCamera 'C' definita più di una volta\n");
-			free(id);
-			return (1);
+				free(id);
+				return (print_err_msg("Error: Camera 'C' definita più di una volta"));
 		}
-		/* parse_camera_line(scene, rest_out) */
+			/* parse_camera_line(scene, rest_out) */
+		scene->n_camera += 1;
 	}
 	else if (ft_strcmp(id, "L") == 0)
 	{
-		scene->n_lights += 1;
 		if (scene->n_lights > 1)
 		{
 			fprintf(stderr, "Error\nLuce 'L' definita più di una volta\n");
 			free(id);
 			return (1);
 		}
+		scene->n_lights += 1;
 		/* parse_light_line(scene, rest_out) */
 	}
 	else if (ft_strcmp(id, "sp") == 0)

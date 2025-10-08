@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 21:47:23 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 11:09:05 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	scene_reset(t_scene *scene)
 	scene->cam.pos = vector_make(0.0, 0.0, 0.0);
 	scene->cam.dir = vector_make(0.0, 0.0, 1.0);
 	/* direzione di default “in avanti” */
-	scene->cam.fov_deg = 0.0;
+	scene->cam.fov_rad = 0.0;
 	scene->cam.present = false;
 	/* --- Light (spot principale del mandatory) --- */
 	scene->light.pos = vector_make(0.0, 0.0, 0.0);

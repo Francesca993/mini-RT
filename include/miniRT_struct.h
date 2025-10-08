@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 21:26:39 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 11:08:15 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,8 @@ typedef struct s_camera
 {
 	t_vector	pos;
 	t_vector dir;     // normalizzata
-	double fov_deg; // (0,180)
+	int    fov_deg;    // come da file .rt (per debug/log)
+    double fov_rad;    // per i calcoli
 	bool	present;
 }			t_camera;
 
