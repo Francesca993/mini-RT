@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 11:09:05 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 14:12:02 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* ---- HELPER ---- */
 /*
 Quello che fa è creare una variabile c di tipo  t_vector,
-	assegnargli i valori r, g, b ai rispettivi campi, e restituirla.
+assegnargli i valori r, g, b ai rispettivi campi, e restituirla.
 */
 static inline t_vector	vector_make(double x, double y, double z)
 {
@@ -29,7 +29,7 @@ static inline t_vector	vector_make(double x, double y, double z)
 }
 /*
 Quello che fa è creare una variabile c di tipo t_color, assegnargli i valori r,
-	g, b ai rispettivi campi, e restituirla.
+g, b ai rispettivi campi, e restituirla.
 */
 static inline t_color	color_make(double r, double g, double b)
 {
@@ -42,7 +42,7 @@ static inline t_color	color_make(double r, double g, double b)
 }
 
 /* Inizializza/azzera completamente la scena,
-	liberando eventuale storage precedente. */
+liberando eventuale storage precedente. */
 void	scene_reset(t_scene *scene)
 {
 	/* --- sicurezza memoria dinamica oggetti --- */
@@ -80,7 +80,7 @@ void	scene_reset(t_scene *scene)
 }
 
 /*Prende la riga con gnl, salta gia quelle vuote, inizializza scene,
-	leva il \n e mette '\0' e fa partire la funzione che mentre legge riga
+leva il \n e mette '\0' e fa partire la funzione che mentre legge riga
 per irga, fa anche il chekc in "tempo reale" dei requisiti. */
 int	parse_file(const char *path, t_scene *scene)
 {
@@ -88,18 +88,11 @@ int	parse_file(const char *path, t_scene *scene)
 	int		fd;
 
 	if (!path || !scene)
-	{
 		return (print_err_msg("parse_file: argomenti non validi."));
-		// printf("parse_file: argomenti non validi\n");
-		// return (1);
-	}
 	scene_reset(scene); // reset contatori / inizializzazione scena
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
-	{
-		perror("miniRT: open");
-		return (1);
-	}
+		return (print_err_msg("miniRT: open"));
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		if (ft_is_blank(line)) // <-- salta riga vuota o spazi
@@ -118,9 +111,6 @@ int	parse_file(const char *path, t_scene *scene)
 		free(line);
 	}
 	if (close(fd) == -1)
-	{
-		perror("Error: miniRT: close");
-		return (1);
-	}
+		return (print_err_msg("Error: miniRT: close"));
 	return (0);
 }

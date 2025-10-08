@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 11:04:06 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 14:14:32 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,6 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 	id = NULL;
 	if (!line || !scene)
 		return (1);
-	/* Ogni riga del file .rt deve contenere ESATTAMENTE un identificatore seguito
-	   dal suo payload. Parsiamo solo il primo token (id) e passiamo il resto
-	   (rest_out) al relativo parser. Non re-parsare il payload come se fosse
-	   un altro identificatore. */
 	rest_out = NULL;
 	id = check_first_token(line, &rest_out);
 	if (!id)
@@ -84,19 +80,16 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 	}
 	else if (ft_strcmp(id, "C") == 0)
 	{
-		if (scene->n_camera > 1)
+		if (parse_camera_line(scene, rest_out) != 0)
 		{
-				free(id);
-				return (print_err_msg("Error: Camera 'C' definita più di una volta"));
+			free (id);
+			return (1);
 		}
-			/* parse_camera_line(scene, rest_out) */
-		scene->n_camera += 1;
 	}
 	else if (ft_strcmp(id, "L") == 0)
 	{
 		if (scene->n_lights > 1)
 		{
-			fprintf(stderr, "Error\nLuce 'L' definita più di una volta\n");
 			free(id);
 			return (1);
 		}
@@ -126,6 +119,6 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 	}
 	free(id);
 	// --------- DEBUG   ---------------
-	debug_print_scene(scene, "DEBUG SUL LEXER");
+	// debug_print_scene(scene, "DEBUG SUL LEXER");
 	return (0);
 }

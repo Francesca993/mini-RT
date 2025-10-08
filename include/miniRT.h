@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/07 21:36:36 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 14:09:40 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <stdio.h>
+#include <limits.h>
 
 /* ================= Config ================= */
 # ifndef WIDTH
@@ -58,7 +59,10 @@ void	    scene_free(t_scene *scene); // Libera la Union,gli objects della t_scen
 int			parse_double(const char **line, double *out);
 int			parse_rgb(const char **input_ptr, int *out_red, int *out_green,
 				int *out_blue);
-const char	*skip_spaces(const char *p);
+int			parse_vec3(const char **input_ptr, t_vector *out_vec);
+int			skip_comma(const char **input_ptr);
+int			parse_int(const char **line_pointer, int *out_value); // Converte un intero, 
+					// ma restituisce anche il puntatore a dopo il numero convertito
 
 /* ================= Debug ================= */
 void		debug_print_scene(const t_scene *scene_ptr, const char *title);
@@ -78,10 +82,12 @@ int	has_rt_extension(const char *path);  // controlla che abbia l'estensione .rt
 int	check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L,
                                         // C e almeno una sp, cy, pl
 int	is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei token ammessi nel mandatory
-int			parse_ambient_line(t_scene *scene, char *rest_of_line);
+int 	check_vec3direction(t_vector *direction_value);
 
 /* ================= Parse File ================= */
 int			parse_file(const char *path, t_scene *scene);
+int			parse_ambient_line(t_scene *scene, char *rest_of_line);
+int			parse_camera_line(t_scene *scene, char *rest_of_line);
 
 /* ================= Lexer ================= */
 int	lex_scan_check_and_count(t_scene *scene, char *line);

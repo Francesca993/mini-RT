@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/06 18:36:10 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/08 14:09:05 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,40 +29,6 @@ int has_rt_extension(const char *path)
 	return (0);
 }
 
-
- /* --- check --- *
-** Presenze obbligatorie e unicità:
-A una sola volta.
-C una sola volta.
-L una sola volta nel mandatory (nel bonus potranno essere più luci).
-** Almeno un oggetto (sp/pl/cy) deve essere presente per avere qualcosa da renderizzare 
-(se non c’è nulla → errore logico di scena vuota).
-*/
-int check_startingscene(t_scene *scene)
-{
-    if (scene->n_ambient != 1)
-    {
-        printf("Errore: atteso 1 'A', trovato %d.\n", scene->n_ambient);
-        return 1;
-    }
-    if (scene->n_camera != 1) 
-    {
-        printf("Errore: atteso 1 'C', trovato %d.\n", scene->n_camera);
-        return 1;
-    }
-    if (scene->n_lights != 1) 
-    {
-        printf("Errore: atteso 1 'L', trovato %d.\n", scene->n_lights);
-        return 1;
-    }
-    if ((scene->n_spheres + scene->n_planes + scene->n_cylinders) == 0) 
-    {
-        printf("Errore: nessun oggetto nella scena.\n");
-        return 1;
-    }
-    return 0; /*SUCCESSO */
-}
-
 /* Ritorna 1 se id è uno dei token ammessi nel mandatory */
 int is_valid_identifier(const char *id)
 {
@@ -74,4 +40,19 @@ int is_valid_identifier(const char *id)
     if (ft_strcmp(id, "pl") == 0) return 1;
     if (ft_strcmp(id, "cy") == 0) return 1;
     return 0;
+}
+
+/* Controlla che i Valori delle coordinate della camra siano nei range ammessi
+dal subject:
+3D normalized orientation vector, 
+in the range [-1,1] 
+for each x, y, z axis: 0.0,0.0,1.0 */
+int check_vec3direction(t_vector *direction_value)
+{
+    /* 2.a) Componenti in [-1,1] */
+	if (direction_value->x < -1.0 || direction_value->x > 1.0
+		|| direction_value->y < -1.0 || direction_value->y > 1.0
+		|| direction_value->z < -1.0 || direction_value->z > 1.0)
+		return (0);
+    return (1);
 }
