@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 12:35:40 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/09 10:29:50 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,16 @@ typedef struct s_vector
 
 /* --- Colori --- */
 // Colori interni in spazio lineare [0..1]
+/*
+PERCHE' RGB IN DOUBLE
+Quando fai i calcoli di luce, riflessione, ombreggiature, ecc.,
+il programma deve moltiplicare e sommare i colori —
+e deve farlo con precisione decimale, non con numeri interi.
+Se hai un’illuminazione del 40% (ratio = 0.4)
+e un colore rosso 255,0,0
+allora il colore illuminato sarà: 255 * 0.4 = 102 
+Ma se tu usassi solo interi (0 o 1), perderesti tutta la sfumatura.
+*/
 typedef struct s_color
 {
 	double	r;
