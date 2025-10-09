@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/08 14:09:40 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/09 11:29:03 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,22 @@ int			ft_is_space_char(char c);
 const char	*skip_spaces(const char *p);
 
 /* ================= Check File ================= */
-int	has_rt_extension(const char *path);  // controlla che abbia l'estensione .rt
-int	check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L,
+int			has_rt_extension(const char *path);  // controlla che abbia l'estensione .rt
+int			check_startingscene(t_scene *scene); // controlla che cia sia una sola A, L,
                                         // C e almeno una sp, cy, pl
-int	is_valid_identifier(const char *id);  // Ritorna 1 se id è uno dei token ammessi nel mandatory
-int 	check_vec3direction(t_vector *direction_value);
+int			is_valid_identifier(const char *id);  // Ritorna 1 se id è uno 
+											// dei token ammessi nel mandatory
+int 		check_vec3direction(t_vector *direction_value);
+int			check_presence(t_scene *scene); // Controlla presenze obbligatorie a fine file
 
 /* ================= Parse File ================= */
 int			parse_file(const char *path, t_scene *scene);
 int			parse_ambient_line(t_scene *scene, char *rest_of_line);
 int			parse_camera_line(t_scene *scene, char *rest_of_line);
+int			parse_light_line(t_scene *scene, char *rest_of_line);
 
 /* ================= Lexer ================= */
-int	lex_scan_check_and_count(t_scene *scene, char *line);
+int			lex_scan_check_and_count(t_scene *scene, char *line);
 		///* Prima scansione della matrice e aggiornamento contatori
 		//+ duplicati A/C/L */
 #endif

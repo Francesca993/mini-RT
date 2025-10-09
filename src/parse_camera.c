@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 10:25:45 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/09 11:52:20 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,17 @@ C -50.0,0,20 0,0,1 70
 /* controllo normalizzazione SENZA sqrt: |x^2+y^2+z^2 - 1| <= eps2
 è per controllare che il vettore direzione della camera sia davvero normalizzato,
 cioè che la sua lunghezza (modulo) sia uguale a 1 */
-static int	is_normalized_len2(double x, double y, double z, double eps2)
-{
-	double	len2;
-	double	diff;
+// static int	is_normalized_len2(double x, double y, double z, double eps2)
+// {
+// 	double	len2;
+// 	double	diff;
 
-	len2 = x * x + y * y + z * z;
-	diff = len2 - 1.0;
-	if (diff < 0.0)
-		diff = -diff;
-	return (diff <= eps2);
-}
+// 	len2 = x * x + y * y + z * z;
+// 	diff = len2 - 1.0;
+// 	if (diff < 0.0)
+// 		diff = -diff;
+// 	return (diff <= eps2);
+// }
 
 /* ============================ parse_camera_line ============================ */
 /* Check se ambiente fosse già presente, parse dei primi vettori,

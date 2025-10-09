@@ -6,7 +6,7 @@
 #    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:20:24 by francesca         #+#    #+#              #
-#    Updated: 2025/10/08 13:47:45 by francesca        ###   ########.fr        #
+#    Updated: 2025/10/09 11:09:22 by francesca        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,7 @@ SRC =	main.c \
 		src/parse_camera.c \
 		src/debug.c \
 		src/parse_units.c \
+		src/parse_light.c \
 
 # === Object files ===
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

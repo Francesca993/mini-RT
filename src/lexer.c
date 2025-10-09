@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 14:14:32 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/09 11:10:45 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,11 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 	}
 	else if (ft_strcmp(id, "L") == 0)
 	{
-		if (scene->n_lights > 1)
+		if (parse_light_line(scene, rest_out) != 0)
 		{
-			free(id);
+			free (id);
 			return (1);
 		}
-		scene->n_lights += 1;
-		/* parse_light_line(scene, rest_out) */
 	}
 	else if (ft_strcmp(id, "sp") == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 14:09:05 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/09 11:33:54 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,47 @@ int check_vec3direction(t_vector *direction_value)
 		|| direction_value->z < -1.0 || direction_value->z > 1.0)
 		return (0);
     return (1);
+}
+/* Check che ci siano Presenze obbligatorie e Unicita di A, C, L una sola volta. 
+mi serve qualcosa che a fine ciclo mi controlli che ci siano tutti e 3 e almeno uno tra gli oggetti
+per il momento stamperà solo un messaggio di errore sennò non andiamo piu avanti*/
+/*
+typedef struct s_scene
+{
+	// istanze reali (da riempire via parser)
+	t_ambient amb; // A (una sola nel mandatory)
+	t_camera cam;  // C (una sola nel mandatory)
+	t_light light; // L (una sola nel mandatory)
+	// contatori utili durante il parsing/validazione
+	int n_ambient; // per rilevare doppie dichiarazioni di A
+	int n_camera;  // per C
+	int n_lights;  // per L (bonus: servirà un array)
+	int		n_spheres;
+	int		n_planes;
+	int		n_cylinders;
+}			t_scene;
+*/
+
+int check_presence(t_scene *scene)
+{
+	if (scene == NULL)
+		return (print_err_msg("Error: scena non valida (NULL)"));
+
+	/* Presenza minima: A, C, L */
+	if (scene->amb.present == false || scene->n_ambient == 0)
+		return (print_err_msg("Error: Ambiente 'A' mancante"));
+	if (scene->cam.present == false || scene->n_camera == 0)
+		return (print_err_msg("Error: Camera 'C' mancante"));
+	if (scene->light.present == false || scene->n_lights == 0)
+		return (print_err_msg("Error: Luce 'L' mancante"));
+
+	/* Duplicati proibiti (subject: maiuscole una sola volta) */
+	if (scene->n_ambient > 1)
+		return (print_err_msg("Error: Ambiente 'A' definito piu' di una volta"));
+	if (scene->n_camera > 1)
+		return (print_err_msg("Error: Camera 'C' definita piu' di una volta"));
+	if (scene->n_lights > 1)
+		return (print_err_msg("Error: Luce 'L' definita piu' di una volta"));
+
+	return (0);
 }
