@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 14:09:45 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/09 10:25:45 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,10 @@ int	parse_camera_line(t_scene *scene, char *rest_of_line)
 		// 	|| direction_value.z < -1.0 || direction_value.z > 1.0)
 		return (print_err_msg("Error: Componenti direzione fuori range [-1,1]"));
 	/* 2.b) Vettore normalizzato (|n|=1) con tolleranza su len² */
-	if (!is_normalized_len2(direction_value.x, direction_value.y,
-			direction_value.z, 1e-6))
-		return (print_err_msg("Error: Direzione camera non normalizzata (|n| deve essere 1)"));
+	// QUESTO CONTROLLO GIA FATTO E DA GGIUNGERE DALLA PARTE MATH ❤️
+	// if (!is_normalized_len2(direction_value.x, direction_value.y,
+	// 		direction_value.z, 1e-6))
+	// 	return (print_err_msg("Error: Direzione camera non normalizzata (|n| deve essere 1)"));
 	/* almeno uno spazio prima del prossimo token */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
@@ -101,7 +102,8 @@ int	parse_camera_line(t_scene *scene, char *rest_of_line)
 	/* 5) Salvataggio in scena */
 	scene->cam.pos = position_value;
 	scene->cam.dir = direction_value;
-	scene->cam.fov_deg = (double)fov_degrees_integer;
+	scene->cam.fov_deg = fov_degrees_integer;
+	// ANCHE QUESTO CALCOLO DA RIVEDERE IN SEGUITO
 	pi_const = 3.14159265358979323846;
 	scene->cam.fov_rad = scene->cam.fov_deg * (pi_const / 180.0);
 	scene->cam.present = true;
