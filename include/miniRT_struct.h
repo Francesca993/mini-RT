@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 10:29:50 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 18:52:13 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,17 +110,20 @@ typedef struct s_cylinder
 
 /* ───────────── Contenitore generico ───────────── */
 
-typedef struct s_object
+typedef union u_figures
 {
-	t_objtype	type;   // serve per capire cosa contiene il union
-	union
-	{
-		t_sphere	sphere;
-		t_plane		plane;
-		t_cylinder	cylinder;
-	}	as;                  // "as" = as.sphere / as.plane / as.cylinder
-}	t_object;
+	t_sphere			sphere;
+	t_plane				plane;
+	t_cylinder			cylinder;
+}						t_figures;
 
+/* Vector di oggetti con due array paralleli */
+typedef struct s_objnode 
+{
+    t_objtype         type;   /* OBJ_SPHERE / OBJ_PLANE / OBJ_CYLINDER */
+    t_figures         fig;    /* union con i dati dell’oggetto */
+    struct s_objnode *next;
+} t_objnode;
 
 /* ───────────── Scena ───────────── */
 typedef struct s_scene
@@ -137,9 +140,9 @@ typedef struct s_scene
 	int		n_spheres;
 	int		n_planes;
 	int		n_cylinders;
-	t_object	*objects;     // array dinamico di oggetti
 	size_t		object_count; // quanti oggetti totali
-	size_t		object_cap;   // capacità allocata
+	t_objnode *obj_head; /* testa */
+    t_objnode *obj_end; /* coda per append O(1) */
 }			t_scene;
 
 #endif

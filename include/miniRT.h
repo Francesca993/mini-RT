@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/09 11:29:03 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 16:50:23 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,18 @@ int			parse_file(const char *path, t_scene *scene);
 int			parse_ambient_line(t_scene *scene, char *rest_of_line);
 int			parse_camera_line(t_scene *scene, char *rest_of_line);
 int			parse_light_line(t_scene *scene, char *rest_of_line);
+int			parse_sphere(t_scene *scene, char *rest_of_line);
+int			parse_plane(t_scene *scene, char *rest_of_line);
 
 /* ================= Lexer ================= */
 int			lex_scan_check_and_count(t_scene *scene, char *line);
 		///* Prima scansione della matrice e aggiornamento contatori
 		//+ duplicati A/C/L */
+
+/* ================= Linked List Utils ================= */
+void objlist_init(t_scene *scene);
+void objlist_destroy(t_scene *scene);
+t_objnode *objnode_new(t_objtype type, t_figures fig);
+int object_list_append(t_scene *scene, t_objtype object_type, t_figures object_payload);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 13:28:00 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/07 21:31:55 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 16:00:32 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,10 @@
 /* Libera  gli objects della t_scena*/
 void	scene_free(t_scene *scene)
 {
-	if (!scene)
-		return;
-	if (scene->objects != NULL)
-        free(scene->objects);
-
-	scene->objects = NULL;
-	scene->object_count = 0;
-	scene->object_cap = 0;
-	return ;
+    if (!scene)
+        return;
+    objlist_destroy(scene);  /* imposta anche obj_head/obj_end a NULL e contatori a 0 */
+    scene->object_count = 0;
 }
 /* Mi serve per liberare l'array di OBJECTS_TYPES*/
 void	free_array(char **arr)

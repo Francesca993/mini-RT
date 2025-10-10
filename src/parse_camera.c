@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 11:52:20 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 18:58:53 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	parse_camera_line(t_scene *scene, char *rest_of_line)
 	t_vector	position_value;
 	t_vector	direction_value;
 	int			fov_degrees_integer;
-	double		pi_const;
+	// double		pi_const;
 
 	if (scene == NULL || rest_of_line == NULL)
 		return (print_err_msg("Error: Parametri mancanti per 'C'"));
@@ -104,8 +104,8 @@ int	parse_camera_line(t_scene *scene, char *rest_of_line)
 	scene->cam.dir = direction_value;
 	scene->cam.fov_deg = fov_degrees_integer;
 	// ANCHE QUESTO CALCOLO DA RIVEDERE IN SEGUITO
-	pi_const = 3.14159265358979323846;
-	scene->cam.fov_rad = scene->cam.fov_deg * (pi_const / 180.0);
+	// pi_const = 3.14159265358979323846;
+	// scene->cam.fov_rad = scene->cam.fov_deg * (pi_const / 180.0);
 	scene->cam.present = true;
 	scene->n_camera += 1;
 	return (0);

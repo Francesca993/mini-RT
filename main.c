@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 10:51:18 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/09 11:48:08 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 16:02:22 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	// TODO: render / mlx init ...
-	// if (scene != NULL)
-	// 	debug_print_scene(scene, "DEBUG SULLA FINE DEL MAIN");
+	if (scene != NULL)
+		debug_print_scene(scene, "DEBUG SULLA FINE DEL MAIN");
 	/*
 	La struttura t_scene stessa viene allocata in main con ft_calloc(
 	La chiamata a free(scene) a fine main è necessaria,

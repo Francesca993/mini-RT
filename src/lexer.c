@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 11:10:45 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 16:51:53 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,13 +96,19 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 	}
 	else if (ft_strcmp(id, "sp") == 0)
 	{
-		scene->n_spheres += 1;
-		/* parse_sphere_line(scene, rest_out) */
+		if (parse_sphere(scene, rest_out) != 0)
+		{
+			free (id);
+			return (1);
+		}
 	}
 	else if (ft_strcmp(id, "pl") == 0)
 	{
-		scene->n_planes += 1;
-		/* parse_plane_line(scene, rest_out) */
+		if (parse_plane(scene, rest_out) != 0)
+		{
+			free (id);
+			return (1);
+		}
 	}
 	else if (ft_strcmp(id, "cy") == 0)
 	{

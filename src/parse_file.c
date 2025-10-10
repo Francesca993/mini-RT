@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 11:39:53 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/10 15:09:10 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,11 @@ static inline t_color	color_make(double r, double g, double b)
 liberando eventuale storage precedente. */
 void	scene_reset(t_scene *scene)
 {
-	/* --- sicurezza memoria dinamica oggetti --- */
-	if (scene->objects != NULL)
-	{
-		free(scene->objects);
-		scene->objects = NULL;
-	}
-	scene->object_count = 0;
-	scene->object_cap = 0;
+	// /* --- sicurezza memoria dinamica oggetti --- */
+	    /* 1) pulizia lista precedente, se esiste */
+    objlist_destroy(scene);
+    /* 2) init lista vuota + azzera contatori */
+    objlist_init(scene);
 	/* --- Ambient --- */
 	scene->amb.ratio = 0.0;
 	scene->amb.color = color_make(0.0, 0.0, 0.0);
