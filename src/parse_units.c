@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:46:16 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 13:47:11 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 15:46:13 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,16 +129,14 @@ int	parse_vec3(const char **input_ptr, t_vector *out_vec)
 }
 
 /* vieta spazi PRIMA del numero: il cursore deve essere già sulla prima cifra */
-static int	parse_RGB_component(const char **input_ptr, int *out_value,
-		int *out_found_comma)
+static int	parse_RGB_component(const char **input_ptr, int *out_value)
 {
 	const char	*cursor;
 	int			value;
 	int			digits_count;
 	int			digit;
 
-	if (input_ptr == NULL || *input_ptr == NULL || out_value == NULL
-		|| out_found_comma == NULL)
+	if (input_ptr == NULL || *input_ptr == NULL || out_value == NULL)
 		return (0);
 	cursor = *input_ptr;
 	/* segni non ammessi e NESSUNO spazio prima: deve esserci SUBITO una cifra */
@@ -160,41 +158,45 @@ static int	parse_RGB_component(const char **input_ptr, int *out_value,
 	}
 	*out_value = value;
 	/* virgola opzionale (la obbligatorietà la gestisce il chiamante) */
-	if (*cursor == ',')
-	{
-		cursor++; /* consuma la virgola */
-		*out_found_comma = 1;
-	}
-	else
-	{
-		*out_found_comma = 0;
-	}
+	// if (*cursor == ',')
+	// {
+	// 	cursor++; /* consuma la virgola */
+	// 	*out_found_comma = 1;
+	// }
+	// else
+	// {
+	// 	*out_found_comma = 0;
+	// }
 	*input_ptr = cursor;
 	return (1);
 }
 
-int	parse_rgb(const char **input_ptr, int *out_red, int *out_green,
-		int *out_blue)
+int	parse_rgb(const char **input_ptr, t_color *out_color)
 {
-	const char	*cursor = *input_ptr;
+	const char	*cursor; 
 	int			r;
 	int			g;
 	int			b;
 
-	int found_comma;
+	if (!input_ptr || !*input_ptr || !out_color)
+		return (0);
+	cursor = *input_ptr;
 	// Serve per assicurarmi che dopo 255 ci sia subito "," e non altro altrimenti invalida subbito prima di proseguire
 	/* R E G: devono essere seguiti da una virgola */
-	if (!parse_RGB_component(&cursor, &r, &found_comma) || !found_comma)
+	if (!parse_RGB_component(&cursor, &r))
 		return (0);
-	if (!parse_RGB_component(&cursor, &g, &found_comma) || !found_comma)
+	if (!skip_comma(&cursor))
+		return(0);
+	if (!parse_RGB_component(&cursor, &g))
 		return (0);
+	if (!skip_comma(&cursor))
+		return(0);
 	/* B: NON deve essere seguito da una virgola (nessuna quarta componente) */
-	if (!parse_RGB_component(&cursor, &b, &found_comma) || found_comma)
+	if (!parse_RGB_component(&cursor, &b))
 		return (0);
-	// QUI DOBBIAMO AGGIUNGERE UN CONTROLLO PER VEDERE CHE DOPO I NUMERI PER L RGB NON CI SIA PIU NIENTE SE NON SPAZI
-	*out_red = r;
-	*out_green = g;
-	*out_blue = b;
+	out_color->r = (double)r / 255.0;
+	out_color->g = (double)g / 255.0;
+    out_color->b = (double)b / 255.0;
 	*input_ptr = cursor;
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:26:12 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/10 15:54:25 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 16:12:10 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,8 @@ void debug_print_scene(const t_scene *scene_ptr, const char *title)
 	debug_print_bool("present", scene_ptr->cam.present);
 	debug_print_vector("pos", scene_ptr->cam.pos);
 	debug_print_vector("dir (normalized)", scene_ptr->cam.dir);
-	printf("fov_rad: %.6f\n", scene_ptr->cam.fov_rad);
+	//printf("fov_rad: %.6f\n", scene_ptr->cam.fov_rad); -> per i calcoli dopo
+	printf("fov_intero: %d\n", scene_ptr->cam.fov_deg);
 	printf("\n");
 
 	/* --- Light (mandatory: una sola) --- */

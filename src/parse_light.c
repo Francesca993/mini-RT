@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 10:37:23 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 11:07:54 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 15:36:42 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,7 @@ int	parse_light_line(t_scene *scene, char *rest_of_line)
     const char  *cursor;
     t_vector    position_value;
     double      light_ratiovalue;
-	int         red;
-	int         green;
-	int         blue;
+	t_color		color;
 
     /* Controlli */
     if (scene == NULL || rest_of_line == NULL)
@@ -65,7 +63,7 @@ int	parse_light_line(t_scene *scene, char *rest_of_line)
 	if (*cursor == '\0')
 		return (print_err_msg("Error: Colore di 'L' mancante (atteso R,G,B)"));
 	/* Leggi R,G,B nel range [0..255] */
-	if (!parse_rgb(&cursor, &red, &green, &blue))
+	if (!parse_rgb(&cursor, &color))
 		return (print_err_msg("Error: Formato colore di 'L' non valido (atteso R,G,B)"));
 	/* Non devono esserci token extra dopo il colore */
 	cursor = skip_spaces(cursor);
@@ -74,9 +72,7 @@ int	parse_light_line(t_scene *scene, char *rest_of_line)
 	/* Salva nella scena (normalizza il colore in [0..1]) */
     scene->light.pos = position_value;
     scene->light.intensity = light_ratiovalue;
-    scene->light.color.r = (double)red   / 255.0;
-    scene->light.color.g = (double)green / 255.0;
-    scene->light.color.b = (double)blue / 255.0;
+    scene->light.color = color;
     scene->light.present   = true;
     scene->n_lights += 1;
 	return (0);

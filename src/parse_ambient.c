@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 23:12:05 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/08 14:06:13 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 15:40:45 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,8 @@ typedef struct s_ambient
 int	parse_ambient_line(t_scene *scene, char *rest_of_line)
 {
 	const char  *cursor;
+	t_color		color;
 	double      ratio_value;
-	int         red;
-	int         green;
-	int         blue;
 	
 	if (scene == NULL || rest_of_line == NULL)
 		return (print_err_msg("Error: Parametro mancante per 'A'"));
@@ -53,18 +51,16 @@ int	parse_ambient_line(t_scene *scene, char *rest_of_line)
 	if (*cursor == '\0')
 		return (print_err_msg("Error: Colore di 'A' mancante (atteso R,G,B)"));
 	/* 3) Leggi R,G,B nel range [0..255] */
-	if (!parse_rgb(&cursor, &red, &green, &blue))
+	if (!parse_rgb(&cursor, &color))
 		return (print_err_msg("Error: Formato colore di 'A' non valido (atteso R,G,B)"));
 	/* 4) Non devono esserci token extra dopo il colore */
 	cursor = skip_spaces(cursor);
 	if (*cursor != '\0')
 		return (print_err_msg("Error: Token extra dopo il colore in 'A'"));
 	/* 5) Salva nella scena (normalizza il colore in [0..1]) */
-	scene->amb.ratio     = ratio_value;
-	scene->amb.color.r   = (double)red   / 255.0;
-	scene->amb.color.g   = (double)green / 255.0;
-	scene->amb.color.b   = (double)blue / 255.0;
-	scene->amb.present   = true;
+	scene->amb.ratio = ratio_value;
+	scene->amb.color = color;
+	scene->amb.present = true;
 
 	return 0;
 }

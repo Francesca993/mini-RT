@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:31:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/10 16:59:21 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 16:17:56 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
     const char  *cursor;
     t_vector    point;
     double      diameter_value;
-	int         red;
-	int         green;
-	int         blue;
+	t_color		color;
     t_figures    payload;
 
         /* Controlli */
@@ -54,7 +52,7 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
 	if (*cursor == '\0')
 		return (print_err_msg("Error: Colore di 'sp' mancante (atteso R,G,B)"));
 	/* Leggi R,G,B nel range [0..255] */
-	if (!parse_rgb(&cursor, &red, &green, &blue))
+	if (!parse_rgb(&cursor, &color))
 		return (print_err_msg("Error: Formato colore di 'sp' non valido (atteso R,G,B)"));
 	/* Non devono esserci token extra dopo il colore */
 	cursor = skip_spaces(cursor);
@@ -63,9 +61,7 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
     /* Sphere */
     payload.sphere.center = point;
     payload.sphere.radius = diameter_value;
-    payload.sphere.color.r = (double)red / 255.0;
-    payload.sphere.color.g = (double)green / 255.0;
-    payload.sphere.color.b = (double)blue / 255.0;
+    payload.sphere.color = color;
     /* 7) Append alla lista oggetti */
     if (object_list_append(scene, OBJ_SPHERE, payload) != 0)
         return 1; /* object_list_append ha già stampato l'errore */
@@ -85,46 +81,31 @@ int parse_plane(t_scene *scene, char *rest_of_line)
 	t_vector	point;
 	t_vector	normal;
     t_figures   payload;
-    int         r;
-	int         g;
-	int         b;
-    double len = 0;
+    t_color		color;
 
 	if (scene == NULL || rest_of_line == NULL)
 		return (print_err_msg("Error: Parametri mancanti per 'pl'"));
 	cursor = skip_spaces(rest_of_line);
-	/* 1) Posizione: x,y,z (CSV senza spazi) */
+	/* 1) Posizione: x,y,z */
 	if (!parse_vec3(&cursor, &point))
 		return (print_err_msg("Error: Posizione piano non valida (atteso x,y,z senza spazi)"));
 	point.w = 1.0; /* punto nello spazio: traslazioni applicate */
-	/* almeno uno spazio prima del prossimo token */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
 		return (print_err_msg("Error: 3D normalized normal vector plane mancante (atteso nx,ny,nz)"));
-	/* 2) Normale: nx,ny,nz */
+	/* Normale: nx,ny,nz */
 	if (!parse_vec3(&cursor, &normal))
 		return (print_err_msg("Error: 3D normalized normal vector plane non valida (atteso nx,ny,nz senza spazi)"));
-	/* direzione è un vettore → w=0.0 perchè NON si sposta*/
 	normal.w = 0.0; /* vettore: traslazioni NON applicate */
-	// /* 2.a) Componenti in [-1,1] */
+	/* Componenti in [-1,1] */
 	if (!check_vec3direction(&normal))
-		// if (normal.x < -1.0 || normal.x > 1.0
-		// 	|| normal.y < -1.0 || normal.y > 1.0
-		// 	|| normal.z < -1.0 || normal.z > 1.0)
 		return (print_err_msg("Error: 3D normalized normal vector plane fuori range [-1,1]"));
-    /* Controllo vettore nullo e normalizzazione */
-    len = sqrt(normal.x * normal.x + normal.y * normal.y + normal.z * normal.z);
-    if (len <= 0.0)
-        return print_err_msg("Error: Normale del piano nulla (0,0,0) non valida");
-    normal.x /= len;
-    normal.y /= len;
-    normal.z /= len;
-	/* almeno uno spazio prima del prossimo token */
+    /* Controllo vettore nullo e normalizzazione  	//VIENE FATTO DOPO NELLA PARTE MATH */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
 		return (print_err_msg("Error: colore del piano mancante"));
-    	/* Leggi R,G,B nel range [0..255] */
-	if (!parse_rgb(&cursor, &r, &g, &b))
+    /* Leggi R,G,B nel range [0..255] */
+	if (!parse_rgb(&cursor, &color))
 		return (print_err_msg("Error: Formato colore di 'pl' non valido (atteso R,G,B)"));
 	/* Non devono esserci token extra dopo il colore */
 	cursor = skip_spaces(cursor);
@@ -133,15 +114,96 @@ int parse_plane(t_scene *scene, char *rest_of_line)
     /* Sphere */
     payload.plane.point = point;
     payload.plane.normal = normal;
-    payload.plane.color.r = (double)r / 255.0;
-    payload.plane.color.g = (double)g / 255.0;
-    payload.plane.color.b = (double)b / 255.0;
+    payload.plane.color = color;
     /* 7) Append alla lista oggetti */
     if (object_list_append(scene, OBJ_PLANE, payload) != 0)
         return 1; /* object_list_append ha già stampato l'errore */
 	return (0);
 }
 
+/*
+ Cylinder:
+cy 50.0,0.0,20.6 0.0,0.0,1.0 14.2 21.42 10,0,255
+∗ identifier: cy
+∗ x, y, z coordinates of the center of the cylinder: 50.0,0.0,20.6
+∗ 3D normalized vector of axis of cylinder, in the range [-1,1] for each x, y,
+z axis: 0.0,0.0,1.0
+∗ the cylinder diameter: 14.2
+∗ the cylinder height: 21.42
+∗ R, G, B colors in the range [0,255]: 10, 0, 255
 
+typedef struct s_cylinder
+{
+	t_vector base;   // punto base lungo l'asse (convenz.
+	t_vector axis;   // direzione normalizzata
+	double radius; // diametro
+	double height; // altezza finita
+	t_color color; // 0..1
+}			t_cylinder;
+*/
+int parse_cylinder(t_scene *scene, char *rest_of_line)
+{
+	const char *cursor;
+	t_vector base;
+	t_vector axis; // direzione normalizzata
+	double radius; 
+	double height;
+	t_color color;
+	t_figures   payload;
 
+	if (scene == NULL || rest_of_line == NULL)
+		return (print_err_msg("Error: Parametri mancanti per 'cy'"));
+	cursor = skip_spaces(rest_of_line);
+	/* Posizione: x,y,z */
+	if (!parse_vec3(&cursor, &base))
+		return (print_err_msg("Error: Posizione cilidro non valida (atteso x,y,z)"));
+	base.w = 1.0; /* punto nello spazio: traslazioni applicate */
+	cursor = skip_spaces(cursor); // Salto gli spazi
+	if (*cursor == '\0')
+		return (print_err_msg("Error: 3D normal vector cylinder mancante (atteso nx,ny,nz)"));
+	/* 2) Normale: nx,ny,nz */
+	if (!parse_vec3(&cursor, &axis))
+		return (print_err_msg("Error: 3D normal vector of axis of cylinder non valida (atteso nx,ny,nz senza spazi)"));
+	axis.w = 0.0; /* vettore: traslazioni NON applicate */ //LO IMPOSTO QUI O NEL MATH?
+	// /* 2.a) Componenti in [-1,1] */
+	if (!check_vec3direction(&axis))
+		return (print_err_msg("Error: 3D normal vector of axis of cylinder fuori range [-1,1]"));
+    /* Controllo vettore nullo e normalizzazione */ // VIENE FATTO DOPO NEL MATH 
+	cursor = skip_spaces(cursor);
+	if (*cursor == '\0')
+		return (print_err_msg("Error: diametro del cilindro mancante"));
+	/* Leggi diametro */
+	if (!parse_double(&cursor, &radius))
+		return (print_err_msg("Error: Formato diametro di 'cy' non valido"));
+	if (radius <= 0.0)
+		return print_err_msg("Error: Il diametro del cilindro deve essere > 0");
+	cursor = skip_spaces(cursor);
+	if (*cursor == '\0')
+	return (print_err_msg("Error: altezza del cilindro mancante"));
+	/* Leggi altezza */
+	if (!parse_double(&cursor, &height))
+		return (print_err_msg("Error: Formato altezza di 'cy' non valido"));
+	if (height <= 0.0)
+		return print_err_msg("Error: L'altezza del cilindro deve essere > 0");
+	cursor = skip_spaces(cursor);
+	if (*cursor == '\0')
+		return (print_err_msg("Error: colore del cilindro mancante"));
+	/* Leggi R,G,B nel range [0..255] */
+	if (!parse_rgb(&cursor, &color))
+		return (print_err_msg("Error: Formato colore di 'cy' non valido (atteso R,G,B)"));
+	/* Non devono esserci token extra dopo il colore */
+	cursor = skip_spaces(cursor);
+	if (*cursor != '\0')
+		return (print_err_msg("Error: Token extra dopo il colore in 'cy'"));
+    /* Cylinder*/
+	payload.cylinder.base = base;
+	payload.cylinder.axis = axis;
+	payload.cylinder.color = color;
+	payload.cylinder.radius = radius;
+	payload.cylinder.height = height;
+    /* 7) Append alla lista oggetti */
+    if (object_list_append(scene, OBJ_CYLINDER, payload) != 0)
+        return 1; /* object_list_append ha già stampato l'errore */
+	return (0);
+}
 

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/10 16:51:53 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 16:05:21 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,11 @@ int	lex_scan_check_and_count(t_scene *scene, char *line)
 	}
 	else if (ft_strcmp(id, "cy") == 0)
 	{
-		scene->n_cylinders += 1;
-		/* parse_cylinder_line(scene, rest_out) */
+		if (parse_cylinder(scene, rest_out) != 0)
+		{
+			free (id);
+			return (1);
+		}
 	}
 	else
 	{
