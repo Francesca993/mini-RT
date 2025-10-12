@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/10 15:09:10 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 17:06:56 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,20 @@ void	scene_reset(t_scene *scene)
 	scene->n_spheres = 0;
 	scene->n_planes = 0;
 	scene->n_cylinders = 0;
+	return ;
+}
+
+/* Rimuove New_line finale */
+void	chop_newline(char *s)
+
+{
+	size_t n;
+
+	if (!s)
+		return ;
+	n = ft_strlen(s);
+	if (n > 0 && s[n - 1] == '\n')
+		s[n - 1] = '\0';
 	return ;
 }
 

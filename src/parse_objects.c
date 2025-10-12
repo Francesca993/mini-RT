@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:31:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/11 16:17:56 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 17:37:12 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,12 +161,10 @@ int parse_cylinder(t_scene *scene, char *rest_of_line)
 	cursor = skip_spaces(cursor); // Salto gli spazi
 	if (*cursor == '\0')
 		return (print_err_msg("Error: 3D normal vector cylinder mancante (atteso nx,ny,nz)"));
-	/* 2) Normale: nx,ny,nz */
-	if (!parse_vec3(&cursor, &axis))
+	if (!parse_vec3(&cursor, &axis))/* Normale: nx,ny,nz */
 		return (print_err_msg("Error: 3D normal vector of axis of cylinder non valida (atteso nx,ny,nz senza spazi)"));
 	axis.w = 0.0; /* vettore: traslazioni NON applicate */ //LO IMPOSTO QUI O NEL MATH?
-	// /* 2.a) Componenti in [-1,1] */
-	if (!check_vec3direction(&axis))
+	if (!check_vec3direction(&axis))// /* 2.a) Componenti in [-1,1] */
 		return (print_err_msg("Error: 3D normal vector of axis of cylinder fuori range [-1,1]"));
     /* Controllo vettore nullo e normalizzazione */ // VIENE FATTO DOPO NEL MATH 
 	cursor = skip_spaces(cursor);

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:46:16 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/11 15:46:13 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/12 06:23:08 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,16 +31,12 @@ int	parse_double(const char **line, double *out)
 	const char	*n_line;
 	int			sign;
 
-	double val;            
-		// Accumula la parte intera (prima del .). Se leggi “123”,
-		// alla fine val = 123.
-	double frac;           
-		// Accumulano la parte frazionaria come intero e la scala corrispondente.
-	double scale;           // La scala o.100 / 0.10 / 0.1000
-	int ndigits;           
-		// Conta quante cifre sono state lette prima il punto.
-	int nfrac;             
-		// Conta quante cifre sono state lette dopo il punto.
+	double val; // Accumula la parte intera (prima del .). Se leggi “123”,
+				// alla fine val = 123.
+	double frac; // Accumulano la parte frazionaria come intero e la scala corrispondente.
+	double scale; // La scala o.100 / 0.10 / 0.1000
+	int ndigits; // Conta quante cifre sono state lette prima il punto.
+	int nfrac; // Conta quante cifre sono state lette dopo il punto.
 	double fractional_part; // variabile temporanea per calcolare frac/scale
 	n_line = skip_spaces(*line); // Salta gli spazi iniziali
 	sign = 1;
@@ -49,15 +45,13 @@ int	parse_double(const char **line, double *out)
 	scale = 1.0;
 	ndigits = 0;
 	nfrac = 0;
-	/* Se c’è +/-, aggiorna sign e avanza. */
-	if (*n_line == '+' || *n_line == '-')
+	if (*n_line == '+' || *n_line == '-') 	/* Se c’è +/-, aggiorna sign e avanza. */
 	{
 		if (*n_line == '-')
 			sign = -1;
 		n_line++;
 	}
-	/* Parte intera */
-	while (ft_isdigit(*n_line))
+	while (ft_isdigit(*n_line)) /* Parte intera */
 	{
 		val = val * 10.0 + (double)(*n_line - '0');
 		n_line++;
@@ -78,35 +72,54 @@ int	parse_double(const char **line, double *out)
 	/* Se non è stato letto nessun carattere numerico né nella parte intera né in quella frazionaria,
 		la funzione fallisce e restituisce 0. */
 	if (ndigits == 0 && nfrac == 0)
-	{
 		return (0);
-	}
-	/* Calcolo esplicito della parte frazionaria normalizzata. Se nfrac è zero uso 0.0,
-		altrimenti uso frac / scale. */
+	// /* Calcolo esplicito della parte frazionaria normalizzata. Se nfrac è zero uso 0.0,
+	// 	altrimenti uso frac / scale. */
 	if (nfrac == 0)
-	{
 		fractional_part = 0.0;
-	}
 	else
-	{
 		fractional_part = frac / scale;
-	}
-	/* Assegno al puntatore di output il valore con segno */
-	*out = sign * (val + fractional_part);
-	/* Aggiorno il puntatore della stringa chiamante per avanzare alla nuova posizione */
-	*line = n_line;
-	/* Successo */
+	*out = sign * (val + fractional_part); /* Assegno al puntatore di output il valore con segno */
+	*line = n_line; /* Aggiorno il puntatore della stringa chiamante per avanzare alla nuova posizione */
 	return (1);
 }
 
+/* Parso "x,y,z" senza spazi, usando parse_double, se int è 1 allora imposta w a 1 sennò a 0 */
+// int	parse_vec3(const char **input_ptr, t_vector *out_vec)
+// {
+// 	const char	*cursor;
+// 	double		x;
+// 	double		y;
+// 	double		z;
 
-/* Parso "x,y,z" senza spazi, usando parse_double */
-int	parse_vec3(const char **input_ptr, t_vector *out_vec)
+// 	if (input_ptr == NULL || *input_ptr == NULL || out_vec == NULL)
+// 		return (0);
+// 	cursor = *input_ptr;
+// 	if (!parse_double(&cursor, &x))
+// 		return (0);
+// 	if (!skip_comma(&cursor))
+// 		return (0);
+// 	if (!parse_double(&cursor, &y))
+// 		return (0);
+// 	if (!skip_comma(&cursor))
+// 		return (0);
+// 	if (!parse_double(&cursor, &z))
+// 		return (0);
+// 	out_vec->x = x;
+// 	out_vec->y = y;
+// 	out_vec->z = z;
+// 	*input_ptr = cursor;
+// 	return (1);
+// }
+
+/* Parso "x,y,z" senza spazi, usando parse_double, se int è 1 allora imposta w a 1 sennò a 0 */
+int	parse_vec3(const char **input_ptr, t_vector *out_vec, double normalized)
 {
 	const char	*cursor;
 	double		x;
 	double		y;
 	double		z;
+	double		w;
 
 	if (input_ptr == NULL || *input_ptr == NULL || out_vec == NULL)
 		return (0);
@@ -124,6 +137,7 @@ int	parse_vec3(const char **input_ptr, t_vector *out_vec)
 	out_vec->x = x;
 	out_vec->y = y;
 	out_vec->z = z;
+	out_vec->w = normalized;
 	*input_ptr = cursor;
 	return (1);
 }
@@ -133,40 +147,23 @@ static int	parse_RGB_component(const char **input_ptr, int *out_value)
 {
 	const char	*cursor;
 	int			value;
-	int			digits_count;
 	int			digit;
 
 	if (input_ptr == NULL || *input_ptr == NULL || out_value == NULL)
 		return (0);
 	cursor = *input_ptr;
-	/* segni non ammessi e NESSUNO spazio prima: deve esserci SUBITO una cifra */
-	if (*cursor == '+' || *cursor == '-' || !ft_isdigit(*cursor))
+	if (*cursor == '+' || *cursor == '-' || !ft_isdigit(*cursor)) /* segni non ammessi e NESSUNO spazio prima: deve esserci SUBITO una cifra */
 		return (0);
 	value = 0;
-	digits_count = 0;
-	/* leggi cifre contigue (niente spazi dentro) e valida on-the-fly */
-	while (ft_isdigit(*cursor))
+	while (ft_isdigit(*cursor)) /* leggi cifre contigue (niente spazi dentro) e valida on-the-fly */
 	{
 		digit = (int)(*cursor - '0');
 		value = value * 10 + digit;
-		digits_count++;
-		if (digits_count > 3) /* >3 cifre non valido per 0..255 */
-			return (0);
 		if (value > 255) /* supera 255 → errore immediato */
 			return (0);
 		cursor++;
 	}
 	*out_value = value;
-	/* virgola opzionale (la obbligatorietà la gestisce il chiamante) */
-	// if (*cursor == ',')
-	// {
-	// 	cursor++; /* consuma la virgola */
-	// 	*out_found_comma = 1;
-	// }
-	// else
-	// {
-	// 	*out_found_comma = 0;
-	// }
 	*input_ptr = cursor;
 	return (1);
 }
@@ -191,7 +188,6 @@ int	parse_rgb(const char **input_ptr, t_color *out_color)
 		return (0);
 	if (!skip_comma(&cursor))
 		return(0);
-	/* B: NON deve essere seguito da una virgola (nessuna quarta componente) */
 	if (!parse_RGB_component(&cursor, &b))
 		return (0);
 	out_color->r = (double)r / 255.0;

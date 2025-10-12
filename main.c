@@ -6,11 +6,16 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 10:51:18 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/10 16:02:22 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/11 17:22:28 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./include/miniRT.h"
+
+void	print_usage(const char *prog)
+{
+	fprintf(stderr, "Usage: %s <scene.rt>\n", prog);
+}
 
 int	main(int argc, char **argv)
 {
@@ -21,8 +26,7 @@ int	main(int argc, char **argv)
 		print_usage(argv[0]);
 		return (1);
 	}
-	/** Check che il file abbia estensione .rt */
-	if (!has_rt_extension(argv[1]))
+	if (!has_rt_extension(argv[1])) /** Check che il file abbia estensione .rt */
 	{
 		print_usage(argv[0]);
 		return (1);
@@ -44,13 +48,6 @@ int	main(int argc, char **argv)
 	// TODO: render / mlx init ...
 	if (scene != NULL)
 		debug_print_scene(scene, "DEBUG SULLA FINE DEL MAIN");
-	/*
-	La struttura t_scene stessa viene allocata in main con ft_calloc(
-	La chiamata a free(scene) a fine main è necessaria,
-	indipendentemente da come vada il parsing.
-	I dati dinamici interni alla scena (in particolare l’array scene->objects): questi vanno liberati
-	prima di liberare la struttura, altrimenti ci sarà una perdita di memoria.
-	*/
 	scene_free(scene);
 	free(scene);
 	return (0);
