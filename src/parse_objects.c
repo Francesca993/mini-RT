@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:31:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/11 17:37:12 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/12 06:27:16 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
 		return (print_err_msg("Error: Parametro mancante per 'sp'"));
 	cursor = skip_spaces(rest_of_line);
     /* Posizione: x,y,z (senza spazi) */
-	if (!parse_vec3(&cursor, &point))
+	if (!parse_vec3(&cursor, &point, 1.0))
 		return (print_err_msg("Error: Posizione Sphere non valida (atteso x,y,z senza spazi)"));
 	/* Punto nello spazio: w = 1.0 */
-	point.w = 1.0;
+	// point.w = 1.0;
 	/* almeno uno spazio prima del prossimo token */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
@@ -87,16 +87,16 @@ int parse_plane(t_scene *scene, char *rest_of_line)
 		return (print_err_msg("Error: Parametri mancanti per 'pl'"));
 	cursor = skip_spaces(rest_of_line);
 	/* 1) Posizione: x,y,z */
-	if (!parse_vec3(&cursor, &point))
+	if (!parse_vec3(&cursor, &point, 1.0))
 		return (print_err_msg("Error: Posizione piano non valida (atteso x,y,z senza spazi)"));
-	point.w = 1.0; /* punto nello spazio: traslazioni applicate */
+	// point.w = 1.0; /* punto nello spazio: traslazioni applicate */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
 		return (print_err_msg("Error: 3D normalized normal vector plane mancante (atteso nx,ny,nz)"));
 	/* Normale: nx,ny,nz */
-	if (!parse_vec3(&cursor, &normal))
+	if (!parse_vec3(&cursor, &normal, 0.0))
 		return (print_err_msg("Error: 3D normalized normal vector plane non valida (atteso nx,ny,nz senza spazi)"));
-	normal.w = 0.0; /* vettore: traslazioni NON applicate */
+	// normal.w = 0.0; /* vettore: traslazioni NON applicate */
 	/* Componenti in [-1,1] */
 	if (!check_vec3direction(&normal))
 		return (print_err_msg("Error: 3D normalized normal vector plane fuori range [-1,1]"));
@@ -155,15 +155,15 @@ int parse_cylinder(t_scene *scene, char *rest_of_line)
 		return (print_err_msg("Error: Parametri mancanti per 'cy'"));
 	cursor = skip_spaces(rest_of_line);
 	/* Posizione: x,y,z */
-	if (!parse_vec3(&cursor, &base))
+	if (!parse_vec3(&cursor, &base, 1.0))
 		return (print_err_msg("Error: Posizione cilidro non valida (atteso x,y,z)"));
-	base.w = 1.0; /* punto nello spazio: traslazioni applicate */
+	// base.w = 1.0; /* punto nello spazio: traslazioni applicate */
 	cursor = skip_spaces(cursor); // Salto gli spazi
 	if (*cursor == '\0')
 		return (print_err_msg("Error: 3D normal vector cylinder mancante (atteso nx,ny,nz)"));
-	if (!parse_vec3(&cursor, &axis))/* Normale: nx,ny,nz */
+	if (!parse_vec3(&cursor, &axis, 0.0))/* Normale: nx,ny,nz */
 		return (print_err_msg("Error: 3D normal vector of axis of cylinder non valida (atteso nx,ny,nz senza spazi)"));
-	axis.w = 0.0; /* vettore: traslazioni NON applicate */ //LO IMPOSTO QUI O NEL MATH?
+	// axis.w = 0.0; /* vettore: traslazioni NON applicate */ //LO IMPOSTO QUI O NEL MATH?
 	if (!check_vec3direction(&axis))// /* 2.a) Componenti in [-1,1] */
 		return (print_err_msg("Error: 3D normal vector of axis of cylinder fuori range [-1,1]"));
     /* Controllo vettore nullo e normalizzazione */ // VIENE FATTO DOPO NEL MATH 

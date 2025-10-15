@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/11 16:05:51 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/12 06:24:18 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	    chop_newline(char *s);      // Rimuove /n finale
 void	    scene_free(t_scene *scene); // Libera la Union,gli objects della t_scene
 int			parse_double(const char **line, double *out);
 int			parse_rgb(const char **input_ptr, t_color *out_color);
-int			parse_vec3(const char **input_ptr, t_vector *out_vec);
+int			parse_vec3(const char **input_ptr, t_vector *out_vec, double normalized);
 int			skip_comma(const char **input_ptr);
 int			parse_int(const char **line_pointer, int *out_value); // Converte un intero, 
 					// ma restituisce anche il puntatore a dopo il numero convertito

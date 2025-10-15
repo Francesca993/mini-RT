@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:46:16 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/12 06:23:08 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/12 06:27:35 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,6 @@ int	parse_vec3(const char **input_ptr, t_vector *out_vec, double normalized)
 	double		x;
 	double		y;
 	double		z;
-	double		w;
 
 	if (input_ptr == NULL || *input_ptr == NULL || out_vec == NULL)
 		return (0);

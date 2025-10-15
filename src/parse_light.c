@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/09 10:37:23 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/11 15:36:42 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/12 06:25:36 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ int	parse_light_line(t_scene *scene, char *rest_of_line)
 		return (print_err_msg("Error: Luce 'L' definito più di una volta"));
 	cursor = skip_spaces(rest_of_line);
     /* Posizione: x,y,z (senza spazi) */
-	if (!parse_vec3(&cursor, &position_value))
+	if (!parse_vec3(&cursor, &position_value, 1.0))
 		return (print_err_msg("Error: Posizione Luce non valida (atteso x,y,z senza spazi)"));
 	/* la posizione è → w=1.0  perchè si muove */
-	position_value.w = 1.0;
+	// position_value.w = 1.0;
 	/* almeno uno spazio prima del prossimo token */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')

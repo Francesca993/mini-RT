@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:26:12 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/11 16:12:10 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/12 06:44:08 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void debug_print_bool(const char *label, bool value)
 static void debug_print_vector(const char *label, t_vector v)
 {
 	if (label)
-		printf("%s: (x=%.6f, y=%.6f, z=%.6f)\n", label, v.x, v.y, v.z);
+		printf("%s: (x=%.6f, y=%.6f, z=%.6f, w=%.6f)\n", label, v.x, v.y, v.z, v.w);
 }
 
 static void debug_print_color_linear01(const char *label, t_color c)
