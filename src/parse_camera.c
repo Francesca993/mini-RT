@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/15 17:43:18 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/15 17:48:03 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ static inline int parse_camera(const char **pcursor, t_vector *position_value, t
 	cursor = skip_spaces(cursor); /* Niente token extra */
 	if (*cursor != '\0')
 		return (print_err_msg("Error: Token extra dopo il FOV della camera"));
+	*pcursor = cursor; /* commit avanzamento, MA SERVE?*/
 	return (0);
 }
 
