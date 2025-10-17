@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:59:53 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/10 16:01:18 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 17:08:06 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,8 @@ int object_list_append(t_scene *scene, t_objtype object_type, t_figures object_p
         scene->obj_end->next = new_node;
         scene->obj_end = new_node;
     }
-
     /* 4) Aggiornare i contatori di scena */
     scene->object_count += 1;
-
-    if (object_type == OBJ_SPHERE)
-        scene->n_spheres += 1;
-    else if (object_type == OBJ_PLANE)
-        scene->n_planes += 1;
-    else if (object_type == OBJ_CYLINDER)
-        scene->n_cylinders += 1;
 
     /* 5) Tutto ok */
     return 0;

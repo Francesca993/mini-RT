@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:46:16 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/12 06:27:35 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 14:02:12 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,34 +83,6 @@ int	parse_double(const char **line, double *out)
 	*line = n_line; /* Aggiorno il puntatore della stringa chiamante per avanzare alla nuova posizione */
 	return (1);
 }
-
-/* Parso "x,y,z" senza spazi, usando parse_double, se int è 1 allora imposta w a 1 sennò a 0 */
-// int	parse_vec3(const char **input_ptr, t_vector *out_vec)
-// {
-// 	const char	*cursor;
-// 	double		x;
-// 	double		y;
-// 	double		z;
-
-// 	if (input_ptr == NULL || *input_ptr == NULL || out_vec == NULL)
-// 		return (0);
-// 	cursor = *input_ptr;
-// 	if (!parse_double(&cursor, &x))
-// 		return (0);
-// 	if (!skip_comma(&cursor))
-// 		return (0);
-// 	if (!parse_double(&cursor, &y))
-// 		return (0);
-// 	if (!skip_comma(&cursor))
-// 		return (0);
-// 	if (!parse_double(&cursor, &z))
-// 		return (0);
-// 	out_vec->x = x;
-// 	out_vec->y = y;
-// 	out_vec->z = z;
-// 	*input_ptr = cursor;
-// 	return (1);
-// }
 
 /* Parso "x,y,z" senza spazi, usando parse_double, se int è 1 allora imposta w a 1 sennò a 0 */
 int	parse_vec3(const char **input_ptr, t_vector *out_vec, double normalized)

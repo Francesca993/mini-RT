@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:48:43 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/11 17:06:56 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 14:07:01 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ int	parse_file(const char *path, t_scene *scene)
 	}
 	if (close(fd) == -1)
 		return (print_err_msg("Error: miniRT: close"));
-	// if (!check_presence(scene))
-	// 	return (1);
+	if (check_presence(scene) == 1)
+		return (1);
 	return (0);
 }

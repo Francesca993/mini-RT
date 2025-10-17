@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/15 16:54:54 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 15:45:34 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,16 @@ int	skip_comma(const char **input_ptr)
 /* Stampa messaggio di errore */
 int	print_err_msg(const char *msg)
 {
+	fprintf(stderr, "Error\n"); /* richiesto dal subject */
 	fprintf(stderr, "%s\n", msg);
+	return (1);
+}
+
+/* Stampa messaggio di errore più specifico */
+int	err_msg(char *type, int num, const char *msg)
+{
+	// fprintf(stderr, "Error\n"); /* richiesto dal subject */
+	fprintf(stderr, "%s numero: %d, %s\n", type, num, msg);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/15 17:48:03 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 16:21:51 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,30 +56,30 @@ o solo spazi dopo, e salva tutto nella t_scene.
 // 	int			fov_degrees_integer;
 
 // 	if (scene == NULL || rest_of_line == NULL)
-// 		return (print_err_msg("Error: Parametri mancanti per 'C'"));
+// 		return (print_err_msg("Parametri mancanti per 'C'"));
 // 	if (scene->cam.present == true)
-// 		return (print_err_msg("Error: Camera 'C' definita più di una volta"));
+// 		return (print_err_msg("Camera 'C' definita più di una volta"));
 // 	cursor = skip_spaces(rest_of_line);
 // 	if (!parse_vec3(&cursor, &position_value, 1.0)) /* Posizione: x,y,z, w → la posizione è un punto → w=1.0  perchè si sposta */
-// 		return (print_err_msg("Error: Posizione camera non valida (atteso x,y,z senza spazi)"));
+// 		return (print_err_msg("Posizione camera non valida (atteso x,y,z senza spazi)"));
 // 	cursor = skip_spaces(cursor);
 // 	if (*cursor == '\0')
-// 		return (print_err_msg("Error: Direzione camera mancante (atteso nx,ny,nz)"));
+// 		return (print_err_msg("Direzione camera mancante (atteso nx,ny,nz)"));
 // 	if (!parse_vec3(&cursor, &direction_value, 0.0)) /* Direzione: nx,ny,nz, nw  → direzione è un vettore → w=0.0 perchè NON si sposta*/
-// 		return (print_err_msg("Error: Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
+// 		return (print_err_msg("Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
 // 	if (!check_vec3direction(&direction_value)) /* Componenti in [-1,1] */
-// 		return (print_err_msg("Error: Componenti direzione fuori range [-1,1]"));
+// 		return (print_err_msg("Componenti direzione fuori range [-1,1]"));
 // 	/*  QUI SI PUO INSERIRE CALCOLO DI NORMALIZZAZIONE FATTO DALLA PARTE MATH */
 // 	cursor = skip_spaces(cursor);
 // 	if (*cursor == '\0')
-// 		return (print_err_msg("Error: FOV della camera mancante"));
+// 		return (print_err_msg("FOV della camera mancante"));
 // 	if (!parse_int(&cursor, &fov_degrees_integer)) /* FOV in gradi [0..180]  */
-// 		return (print_err_msg("Error: FOV della camera non valido (atteso intero)"));
+// 		return (print_err_msg("FOV della camera non valido (atteso intero)"));
 // 	if (fov_degrees_integer < 0 || fov_degrees_integer > 180)
-// 		return (print_err_msg("Error: FOV della camera fuori range [0..180]"));
+// 		return (print_err_msg("FOV della camera fuori range [0..180]"));
 // 	cursor = skip_spaces(cursor); /* Niente token extra */
 // 	if (*cursor != '\0')
-// 		return (print_err_msg("Error: Token extra dopo il FOV della camera"));
+// 		return (print_err_msg("Token extra dopo il FOV della camera"));
 // 	/* Salvataggio in scena */
 // 	scene->cam.pos = position_value;
 // 	scene->cam.dir = direction_value;
@@ -113,30 +113,27 @@ static inline int parse_camera(const char **pcursor, t_vector *position_value, t
 {
 	const char *cursor;
 	
-	// if (!pcursor || !*pcursor || !position_value || !direction_value || !fov_degrees_integer)
-	// 	return (print_err_msg("Error: Parametri mancanti per 'C'"));
 	cursor = skip_spaces(*pcursor);
 	if (!parse_vec3(&cursor, position_value, 1.0)) /* Posizione: x,y,z, w → la posizione è un punto → w=1.0  perchè si sposta */
-		return (print_err_msg("Error: Posizione camera non valida (atteso x,y,z senza spazi)"));
+		return (print_err_msg("Posizione camera non valida (atteso x,y,z senza spazi)"));
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
-		return (print_err_msg("Error: Direzione camera mancante (atteso nx,ny,nz)"));
+		return (print_err_msg("Direzione camera mancante (atteso nx,ny,nz)"));
 	if (!parse_vec3(&cursor, direction_value, 0.0)) /* Direzione: nx,ny,nz, nw  → direzione è un vettore → w=0.0 perchè NON si sposta*/
-		return (print_err_msg("Error: Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
+		return (print_err_msg("Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
 	if (!check_vec3direction(direction_value)) /* Componenti in [-1,1] */
-		return (print_err_msg("Error: Componenti direzione fuori range [-1,1]"));
+		return (print_err_msg("Componenti direzione fuori range [-1,1]"));
 	/*  QUI SI PUO INSERIRE CALCOLO DI NORMALIZZAZIONE FATTO DALLA PARTE MATH */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
-		return (print_err_msg("Error: FOV della camera mancante"));
+		return (print_err_msg("FOV della camera mancante"));
 	if (!parse_int(&cursor, fov_degrees_integer)) /* FOV in gradi [0..180]  */
-		return (print_err_msg("Error: FOV della camera non valido (atteso intero)"));
+		return (print_err_msg("FOV della camera non valido (atteso intero)"));
 	if (*fov_degrees_integer < 0 || *fov_degrees_integer > 180)
-		return (print_err_msg("Error: FOV della camera fuori range [0..180]"));
+		return (print_err_msg("FOV della camera fuori range [0..180]"));
 	cursor = skip_spaces(cursor); /* Niente token extra */
 	if (*cursor != '\0')
-		return (print_err_msg("Error: Token extra dopo il FOV della camera"));
-	*pcursor = cursor; /* commit avanzamento, MA SERVE?*/
+		return (print_err_msg("Token extra dopo il FOV della camera"));
 	return (0);
 }
 
@@ -148,9 +145,9 @@ int	parse_camera_line(t_scene *scene, char *rest_of_line)
 	int			fov_degrees_integer;
 
 	if (scene == NULL || rest_of_line == NULL)
-		return (print_err_msg("Error: Parametri mancanti per 'C'"));
+		return (print_err_msg("Parametri mancanti per 'C'"));
 	if (scene->cam.present == true)
-		return (print_err_msg("Error: Camera 'C' definita più di una volta"));
+		return (print_err_msg("Camera 'C' definita più di una volta"));
 	cursor = skip_spaces(rest_of_line);
 	if (parse_camera(&cursor, &position_value, &direction_value, &fov_degrees_integer) == 1)
 		return (1);

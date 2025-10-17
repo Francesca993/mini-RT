@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/09 11:33:54 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 14:11:15 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_scene
 }			t_scene;
 */
 
+/* Fa il check su presenze e unicità */
 int check_presence(t_scene *scene)
 {
 	if (scene == NULL)
@@ -97,5 +98,8 @@ int check_presence(t_scene *scene)
 	if (scene->n_lights > 1)
 		return (print_err_msg("Error: Luce 'L' definita piu' di una volta"));
 
+	/* Presenza di almeno un oggetto */
+	if (scene->n_planes + scene->n_spheres + scene->n_cylinders == 0)
+		return(print_err_msg("Error: Deve esserci almeno un cy o pl o sp"));
 	return (0);
 }

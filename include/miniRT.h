@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/12 06:24:18 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/17 15:08:30 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void		debug_print_scene(const t_scene *scene_ptr, const char *title);
 void		free_array(char **arr);
 void		scene_reset(t_scene *scene);
 int			print_err_msg(const char *msg);
+int			err_msg(char *type, int num, const char *msg);
 
 /* ================= ft_skip_spaces ================= */
 int			ft_is_blank(const char *s);

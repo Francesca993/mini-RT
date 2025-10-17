@@ -6,7 +6,7 @@
 #    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:20:24 by francesca         #+#    #+#              #
-#    Updated: 2025/10/10 15:56:55 by francesca        ###   ########.fr        #
+#    Updated: 2025/10/17 16:41:46 by francesca        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,8 +47,10 @@ SRC =	main.c \
 		src/debug.c \
 		src/parse_units.c \
 		src/parse_light.c \
-		src/parse_objects.c \
 		src/lst_function.c \
+		src/parse_cylinder.c \
+		src/parse_plane.c \
+		src/parse_sphere.c \
 
 # === Object files ===
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
