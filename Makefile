@@ -6,7 +6,7 @@
 #    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/29 12:20:24 by francesca         #+#    #+#              #
-#    Updated: 2025/10/17 16:41:46 by francesca        ###   ########.fr        #
+#    Updated: 2025/10/20 16:56:45 by francesca        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,21 +36,21 @@ OBJ_DIR = obj
 
 # === Sources ===
 SRC =	main.c \
-		src/utils.c \
-		src/check_file.c \
-		src/ft_skip_spaces.c \
-		src/parse_file.c \
-		src/lexer.c \
-		src/free.c \
-		src/parse_ambient.c \
-		src/parse_camera.c \
-		src/debug.c \
-		src/parse_units.c \
-		src/parse_light.c \
-		src/lst_function.c \
-		src/parse_cylinder.c \
-		src/parse_plane.c \
-		src/parse_sphere.c \
+		parser/src/utils.c \
+		parser/src/check_file.c \
+		parser/src/ft_skip_spaces.c \
+		parser/src/parse_file.c \
+		parser/src/lexer.c \
+		parser/src/free.c \
+		parser/src/parse_ambient.c \
+		parser/src/parse_camera.c \
+		parser/src/debug.c \
+		parser/src/parse_units.c \
+		parser/src/parse_light.c \
+		parser/src/lst_function.c \
+		parser/src/parse_cylinder.c \
+		parser/src/parse_plane.c \
+		parser/src/parse_sphere.c \
 
 # === Object files ===
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
