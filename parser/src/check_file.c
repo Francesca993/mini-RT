@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 14:11:15 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/20 17:02:19 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,15 @@ int check_vec3direction(t_vector *direction_value)
 	if (direction_value->x < -1.0 || direction_value->x > 1.0
 		|| direction_value->y < -1.0 || direction_value->y > 1.0
 		|| direction_value->z < -1.0 || direction_value->z > 1.0)
+		{
+			print_err_msg("3D normal vector of axis of cylinder fuori range [-1,1]");
+			return (0);
+		}
+	if (direction_value->x == 0 && direction_value->y == 0 && direction_value->z == 0)
+	{
+		print_err_msg("Vettore di normalizzazione nullo");
 		return (0);
+	}
     return (1);
 }
 /* Check che ci siano Presenze obbligatorie e Unicita di A, C, L una sola volta. 

@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 16:21:51 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/20 17:06:16 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ static inline int parse_camera(const char **pcursor, t_vector *position_value, t
 	if (!parse_vec3(&cursor, direction_value, 0.0)) /* Direzione: nx,ny,nz, nw  → direzione è un vettore → w=0.0 perchè NON si sposta*/
 		return (print_err_msg("Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
 	if (!check_vec3direction(direction_value)) /* Componenti in [-1,1] */
-		return (print_err_msg("Componenti direzione fuori range [-1,1]"));
+		return (err_msg("Camera", 1, ""));
 	/*  QUI SI PUO INSERIRE CALCOLO DI NORMALIZZAZIONE FATTO DALLA PARTE MATH */
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')

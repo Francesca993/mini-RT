@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:31:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 17:06:39 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/20 17:01:46 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ static inline int cylinder(const char **pcursor, t_vector *axis, t_vector *base,
 		return (print_err_msg("3D normal vector of axis of cylinder non valida (atteso nx,ny,nz senza spazi)"));
 	// axis.w = 0.0; /* vettore: traslazioni NON applicate */ //LO IMPOSTO QUI O NEL MATH?
 	if (!check_vec3direction(axis))// /* 2.a) Componenti in [-1,1] */
-		return (print_err_msg("3D normal vector of axis of cylinder fuori range [-1,1]"));
+		return (1);
+		// return (print_err_msg("3D normal vector of axis of cylinder fuori range [-1,1]"));
     /* Controllo vettore nullo e normalizzazione */ // VIENE FATTO DOPO NEL MATH 
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
