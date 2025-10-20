@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 15:45:34 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/20 13:43:21 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,92 +41,3 @@ int	err_msg(char *type, int num, const char *msg)
 	fprintf(stderr, "%s numero: %d, %s\n", type, num, msg);
 	return (1);
 }
-
-/* Helper per la norm per parse_int controlla overflow */
-static inline int check_value_max(int sign, long acc)
-{
-	if (sign == 1 && acc > (long)INT_MAX)
-		return (0);
-	if (sign == -1 && -acc < (long)INT_MIN)
-			return (0);
-	return (1);
-}
-
-/* Helper: legge segno, consuma le cifre con overflow-check, aggiorna cursor e out_value */
-static int	parse_int_core(const char **cursor, int *out_value)
-{
-	long	acc;
-	int		sign;
-
-	acc = 0;
-	sign = 1;
-	if (!cursor || !*cursor || !out_value)
-		return (0);
-	if (**cursor == '+' || **cursor == '-')
-	{
-		if (**cursor == '-')
-			sign = -1;
-		(*cursor)++;
-	}
-	if (!ft_isdigit(**cursor))
-		return (0);
-	while (ft_isdigit(**cursor))
-	{
-		acc = acc * 10 + (**cursor - '0');
-		if (!check_value_max(sign, acc))
-			return (0);
-		(*cursor)++;
-	}
-	*out_value = (int)(acc * sign);
-	return (1);
-}
-
-int	parse_int(const char **line_pointer, int *out_value)
-{
-	const char	*cursor;
-
-	if (!line_pointer || !*line_pointer || !out_value)
-		return (0);
-
-	cursor = skip_spaces(*line_pointer);
-	if (!parse_int_core(&cursor, out_value))
-		return (0);
-
-	*line_pointer = cursor;
-	return (1);
-}
-
-/* Converte da stringa a intero ma restituisce anche il puntatorte alla stringa */
-// int	parse_int(const char **line_pointer, int *out_value)
-// {
-// 	const char	*cursor;
-// 	long		accumulator;
-// 	int			sign;
-
-// 	if (line_pointer == 0 || *line_pointer == 0 || out_value == 0)
-// 		return (0);
-// 	cursor = skip_spaces(*line_pointer);
-// 	accumulator = 0;
-// 	sign = 1;
-// 	if (*cursor == '+' || *cursor == '-')
-// 	{
-// 		if (*cursor == '-')
-// 			sign = -1;
-// 		cursor++;
-// 	}
-// 	if (!ft_isdigit(*cursor))
-// 		return (0);
-// 	while (ft_isdigit(*cursor))
-// 	{
-// 		accumulator = accumulator * 10 + (*cursor - '0');
-// 		if (sign == 1 && accumulator > (long)INT_MAX)
-// 			return (0);
-// 		if (sign == -1 && -accumulator < (long)INT_MIN)
-// 			return (0);
-// 		cursor++;
-// 	}
-// 	*out_value = (int)(accumulator * sign);
-// 	*line_pointer = cursor;
-// 	return (1);
-// }
-

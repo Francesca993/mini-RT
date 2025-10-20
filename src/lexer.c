@@ -6,47 +6,58 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 18:31:44 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 15:17:44 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/20 13:21:25 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-// Ritorna: id allocato (max 2 char + '\0') da free()-are.
 // *rest_out: punta al resto della riga (dopo l'id e gli spazi).
 // Non modifica 'line'.
-static char	*check_first_token(char *line, char **rest_out)
+static int	check_first_token(char *line, char **rest_out, char *id)
 {
-	char	*id;
 	int		i;
 
 	i = 0;
-	id = ft_calloc(10, sizeof(char));
-	// max 10 char (per sicurezza anche se al massimo sono due,
-	//per essere sicura di non tagliare qualcosa di piu lungo
-	//	+ terminatore 
-	if (!id) return (NULL);
 	if (rest_out)
 		*rest_out = NULL;
-	/* Skippa spazi iniziali */
-	while (*line && ft_is_space_char(*line))
+	while (*line && ft_is_space_char(*line)) /* Skippa spazi iniziali */
 		line++;
-	/* token = [^space/tab]...  */
-	// copia massimo 10 caratteri finché non trova spazio o fine riga
-	while (*line && !ft_is_space_char(*line) && i < 9)
+	while (*line && !ft_is_space_char(*line) && i < 9) // copia massimo 10 caratteri finché non trova spazio o fine riga
 		id[i++] = *line++;
-	id[i] = '\0'; // terminatore già garantito da calloc, ma chiudiamo
-	if (!is_valid_identifier(id))
-	/* is_valid_identifier Ritorna 1 se id è uno dei token ammessi nel mandatory */
-	{
-		fprintf(stderr, "Error\nIdentificatore non valido\n");
-		return (NULL);
-	}
+	id[i] = '\0';
+	if (!is_valid_identifier(id)) /* is_valid_identifier Ritorna 1 se id è uno dei token ammessi nel mandatory */
+		return (print_err_msg("Identificatore non valido"));
 	while (*line && ft_is_space_char(*line))
 		line++;
 	if (*line)
 		*rest_out = line;
-	return (id);
+	return (0);
+}
+
+// Messaggi di errore tutti dentro parse_ambient_line
+static inline int handle_capital(t_scene *scene, char *line, const char *id)
+{	
+	if (ft_strcmp(id, "A") == 0)
+			return (parse_ambient_line(scene, line) != 0); 
+	else if (ft_strcmp(id, "C") == 0)
+			return (parse_camera_line(scene, line) != 0);
+	else if (ft_strcmp(id, "L") == 0)
+			return (parse_light_line(scene, line) != 0);
+	else
+		return (print_err_msg("Identificatore non valido"));
+}
+
+static inline int handle_obj(t_scene *scene, char *line, const char *id)
+{
+	if (ft_strcmp(id, "sp") == 0)
+			return (parse_sphere(scene, line) != 0);
+	else if (ft_strcmp(id, "pl") == 0)
+			return (parse_plane(scene, line) != 0);
+	else if (ft_strcmp(id, "cy") == 0)
+			return (parse_cylinder(scene, line) != 0);
+	else
+		return (print_err_msg("Identificatore non valido"));
 }
 
 /*
@@ -60,72 +71,19 @@ static char	*check_first_token(char *line, char **rest_out)
 */
 int	lex_scan_check_and_count(t_scene *scene, char *line)
 {
-	char *id;
+	char id[10];
 	char *rest_out;
 
-	id = NULL;
 	if (!line || !scene)
 		return (1);
 	rest_out = NULL;
-	id = check_first_token(line, &rest_out);
-	if (!id)
+	if (check_first_token(line, &rest_out, id))
 		return (1);
-	if (ft_strcmp(id, "A") == 0)
-	{
-		if (parse_ambient_line(scene, rest_out) != 0)
-		{
-			free(id);
-			return (1); // Messaggi di errore tutti dentro parse_ambient_line
-		}
-	}
-	else if (ft_strcmp(id, "C") == 0)
-	{
-		if (parse_camera_line(scene, rest_out) != 0)
-		{
-			free (id);
-			return (1);
-		}
-	}
-	else if (ft_strcmp(id, "L") == 0)
-	{
-		if (parse_light_line(scene, rest_out) != 0)
-		{
-			free (id);
-			return (1);
-		}
-	}
-	else if (ft_strcmp(id, "sp") == 0)
-	{
-		if (parse_sphere(scene, rest_out) != 0)
-		{
-			free (id);
-			return (1);
-		}
-	}
-	else if (ft_strcmp(id, "pl") == 0)
-	{
-		if (parse_plane(scene, rest_out) != 0)
-		{
-			free (id);
-			return (1);
-		}
-	}
-	else if (ft_strcmp(id, "cy") == 0)
-	{
-		if (parse_cylinder(scene, rest_out) != 0)
-		{
-			free (id);
-			return (1);
-		}
-	}
+	
+	if (id[0] == 'A' || id[0] == 'C' || id[0] == 'L')
+		return(handle_capital(scene, rest_out, id));
+	else if (id[0] == 's' || id[0] == 'p' || id[0] == 'c')
+		return(handle_obj(scene, rest_out, id));
 	else
-	{
-		fprintf(stderr, "Error\nIdentificatore sconosciuto: '%s'\n", id);
-		free(id);
 		return (1);
-	}
-	free(id);
-	// --------- DEBUG   ---------------
-	// debug_print_scene(scene, "DEBUG SUL LEXER");
-	return (0);
 }

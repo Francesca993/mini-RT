@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:46:16 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 14:02:12 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/20 13:02:04 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 /* Parsing double base-10 con '.' (niente expo). Ritorna 1 ok, 0 errore. */
 /*
-Cosa fa in breve
 Salta gli spazi iniziali.
 Legge un segno opzionale + o -.
 Legge la parte intera (sequenza di cifre).
@@ -165,5 +164,60 @@ int	parse_rgb(const char **input_ptr, t_color *out_color)
 	out_color->g = (double)g / 255.0;
     out_color->b = (double)b / 255.0;
 	*input_ptr = cursor;
+	return (1);
+}
+
+/* Helper per la norm per parse_int controlla overflow */
+static inline int check_value_max(int sign, long acc)
+{
+	if (sign == 1 && acc > (long)INT_MAX)
+		return (0);
+	if (sign == -1 && -acc < (long)INT_MIN)
+			return (0);
+	return (1);
+}
+
+/* Helper: legge segno, consuma le cifre con overflow-check, aggiorna cursor e out_value */
+static int	parse_int_core(const char **cursor, int *out_value)
+{
+	long	acc;
+	int		sign;
+
+	acc = 0;
+	sign = 1;
+	if (!cursor || !*cursor || !out_value)
+		return (0);
+	if (**cursor == '+' || **cursor == '-')
+	{
+		if (**cursor == '-')
+			sign = -1;
+		(*cursor)++;
+	}
+	if (!ft_isdigit(**cursor))
+		return (0);
+	while (ft_isdigit(**cursor))
+	{
+		acc = acc * 10 + (**cursor - '0');
+		if (!check_value_max(sign, acc))
+			return (0);
+		(*cursor)++;
+	}
+	*out_value = (int)(acc * sign);
+	return (1);
+}
+
+/* Converte da stringa a intero ma restituisce anche il puntatorte alla stringa */
+int	parse_int(const char **line_pointer, int *out_value)
+{
+	const char	*cursor;
+
+	if (!line_pointer || !*line_pointer || !out_value)
+		return (0);
+
+	cursor = skip_spaces(*line_pointer);
+	if (!parse_int_core(&cursor, out_value))
+		return (0);
+
+	*line_pointer = cursor;
 	return (1);
 }
