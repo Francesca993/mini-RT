@@ -6,21 +6,27 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:59:53 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 17:08:06 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/22 19:31:28 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#import "miniRT.h"
+# include "miniRT.h"
 
 /* reset dei soli campi lista (non libera: quello lo fa destroy) */
 void objlist_init(t_scene *scene)
 {
     scene->obj_head = NULL;
     scene->obj_end = NULL;
+     /* --- contatori logici per validazione (A/C/L una sola volta) --- */
+    scene->n_ambient = 0;
+	scene->n_camera = 0;
+	scene->n_lights = 0;
+	scene->n_shapes = 0;
+	/* --- contatori oggetti geometrici --- */
+	scene->n_spheres = 0;
+	scene->n_planes = 0;
+	scene->n_cylinders = 0;
     scene->object_count = 0;
-    scene->n_spheres = 0;
-    scene->n_planes = 0;
-    scene->n_cylinders = 0;
 }
 
 /* libera tutta la lista (da chiamare alla chiusura del programma) */
@@ -40,14 +46,20 @@ void objlist_destroy(t_scene *scene)
     }
     scene->obj_head = NULL;
     scene->obj_end = NULL;
+     /* --- contatori logici per validazione (A/C/L una sola volta) --- */
+    scene->n_ambient = 0;
+	scene->n_camera = 0;
+	scene->n_lights = 0;
+	scene->n_shapes = 0;
+	/* --- contatori oggetti geometrici --- */
+	scene->n_spheres = 0;
+	scene->n_planes = 0;
+	scene->n_cylinders = 0;
     scene->object_count = 0;
-    scene->n_spheres = 0;
-    scene->n_planes = 0;
-    scene->n_cylinders = 0;
 }
 
 /* Aggiunge un nuovo nodo */
-t_objnode *objnode_new(t_objtype type, t_figures fig)
+t_objnode *objnode_new(t_shape_type type, t_figures fig)
 {
     t_objnode *n;
     
@@ -55,13 +67,13 @@ t_objnode *objnode_new(t_objtype type, t_figures fig)
     if (!n) 
         return NULL;
     n->type = type;
-    n->fig  = fig;   /* copia per valore del union */
+    n->fig  = fig;   // copia per valore del union 
     n->next = NULL;
     return n;
 }
 /*Serve a aggiungere (append) un nuovo oggetto alla lista concatenata della scena, in O(1), 
 tenendo in ordine gli oggetti come compaiono nel file e aggiornando i contatori.*/
-int object_list_append(t_scene *scene, t_objtype object_type, t_figures object_payload)
+int object_list_append(t_scene *scene, t_shape_type object_type, t_figures object_payload)
 {
     t_objnode *new_node;
 

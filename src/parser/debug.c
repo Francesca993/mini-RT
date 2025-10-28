@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/07 14:26:12 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/12 06:44:08 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/27 15:56:54 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ static void debug_print_vector(const char *label, t_vector v)
 		printf("%s: (x=%.6f, y=%.6f, z=%.6f, w=%.6f)\n", label, v.x, v.y, v.z, v.w);
 }
 
-static void debug_print_color_linear01(const char *label, t_color c)
-{
-	if (label)
-		printf("%s: (r=%.6f, g=%.6f, b=%.6f) [0..1]\n", label, c.r, c.g, c.b);
-}
+// static void debug_print_color_linear01(const char *label, t_color c)
+// {
+// 	if (label)
+// 		printf("%s: (r=%.6f, g=%.6f, b=%.6f)\n", label, c.r, c.g, c.b);
+// }
 
 static void debug_print_color_255(const char *label, t_color c)
 {
@@ -64,7 +64,7 @@ static void debug_print_color_255(const char *label, t_color c)
 	if (b255 > 255) b255 = 255;
 
 	if (label)
-		printf("%s: (R=%d, G=%d, B=%d) [0..255]\n", label, r255, g255, b255);
+		printf("%s: (R=%d, G=%d, B=%d)\n", label, r255, g255, b255);
 }
 
 /* ---------- stampa oggetto singolo (nodo lista) ---------- */
@@ -78,30 +78,27 @@ static void debug_print_object_node(const t_objnode *node, size_t index_in_list)
 
 	switch (node->type)
 	{
-		case OBJ_SPHERE:
+		case SPHERE:
 			printf("    type: SPHERE\n");
 			debug_print_vector("    center", node->fig.sphere.center);
 			printf("    radius: %.6f\n", node->fig.sphere.radius);
-			debug_print_color_linear01("    color linear", node->fig.sphere.color);
-			debug_print_color_255("    color 255", node->fig.sphere.color);
+			debug_print_color_255("color: ", node->fig.sphere.color);
 			break;
 
-		case OBJ_PLANE:
+		case PLANE:
 			printf("    type: PLANE\n");
 			debug_print_vector("    point",  node->fig.plane.point);
 			debug_print_vector("    normal", node->fig.plane.normal);
-			debug_print_color_linear01("    color linear", node->fig.plane.color);
-			debug_print_color_255("    color 255", node->fig.plane.color);
+			debug_print_color_255("color: ", node->fig.plane.color);
 			break;
 
-		case OBJ_CYLINDER:
+		case CYLINDER:
 			printf("    type: CYLINDER\n");
 			debug_print_vector("    base", node->fig.cylinder.base);
 			debug_print_vector("    axis", node->fig.cylinder.axis);
 			printf("    radius: %.6f\n", node->fig.cylinder.radius);
 			printf("    height: %.6f\n", node->fig.cylinder.height);
-			debug_print_color_linear01("    color linear", node->fig.cylinder.color);
-			debug_print_color_255("    color 255", node->fig.cylinder.color);
+			debug_print_color_255("color 255", node->fig.cylinder.color);
 			break;
 
 		default:
@@ -125,34 +122,32 @@ void debug_print_scene(const t_scene *scene_ptr, const char *title)
 
 	/* intestazione */
 	if (title)
-		printf("========== %s ==========\n", title);
+		printf("\n========== %s ==========\n\n", title);
 	else
-		printf("========== Scene Debug ==========\n");
+		printf("\n========== Scene Debug ==========\n\n");
 
 	/* --- Ambient --- */
-	printf("[Ambient]\n");
-	debug_print_bool("present", scene_ptr->amb.present);
-	printf("ratio: %.6f\n", scene_ptr->amb.ratio);
-	debug_print_color_linear01("color linear", scene_ptr->amb.color);
-	debug_print_color_255("color 255", scene_ptr->amb.color);
+	printf("--- AMBIENT ---\n");
+	debug_print_bool("present", scene_ptr->ambient.present);
+	printf("intensity: %.6f\n", scene_ptr->ambient.intensity);
+	debug_print_color_255("color:", scene_ptr->ambient.color);
 	printf("\n");
 
 	/* --- Camera --- */
-	printf("[Camera]\n");
+	printf("--- CAMERA --- \n");
 	debug_print_bool("present", scene_ptr->cam.present);
 	debug_print_vector("pos", scene_ptr->cam.pos);
 	debug_print_vector("dir (normalized)", scene_ptr->cam.dir);
-	//printf("fov_rad: %.6f\n", scene_ptr->cam.fov_rad); -> per i calcoli dopo
+	printf("fov: %.6f\n", scene_ptr->cam.fov);
 	printf("fov_intero: %d\n", scene_ptr->cam.fov_deg);
 	printf("\n");
 
 	/* --- Light (mandatory: una sola) --- */
-	printf("[Light]\n");
-	debug_print_bool("present", scene_ptr->light.present);
-	debug_print_vector("pos", scene_ptr->light.pos);
-	printf("intensity: %.6f\n", scene_ptr->light.intensity);
-	debug_print_color_linear01("color linear", scene_ptr->light.color);
-	debug_print_color_255("color 255", scene_ptr->light.color);
+	printf(" --- LIGHT  --- \n");
+	debug_print_bool("present", scene_ptr->lights[0].present);
+	debug_print_vector("pos", scene_ptr->lights[0].position);
+	printf("intensity: %.6f\n", scene_ptr->lights[0].intensity);
+	debug_print_color_255("color: ", scene_ptr->lights[0].color);
 	printf("\n");
 
 	/* --- Contatori di validazione --- */
@@ -163,6 +158,7 @@ void debug_print_scene(const t_scene *scene_ptr, const char *title)
 	printf("n_spheres: %d\n", scene_ptr->n_spheres);
 	printf("n_planes: %d\n", scene_ptr->n_planes);
 	printf("n_cylinders: %d\n", scene_ptr->n_cylinders);
+	printf("n_shapes: %d\n", scene_ptr->n_shapes);
 	printf("\n");
 
 	/* --- Oggetti (lista) --- */
@@ -185,3 +181,21 @@ void debug_print_scene(const t_scene *scene_ptr, const char *title)
 	printf("=================================\n");
 }
 
+void print_shapes(t_scene *scene)
+{
+    printf("Numero di shapes: %d\n", scene->n_shapes);
+    for (int i = 0; i < scene->n_shapes; i++)
+    {
+        printf("Shape %d:\n", i);
+        printf("  Type: %d\n", scene->shapes[i].type);
+        printf("  Origin: (%f, %f, %f)\n", 
+               scene->shapes[i].origin.x, 
+               scene->shapes[i].origin.y, 
+               scene->shapes[i].origin.z);
+        // Stampa altre proprietà se vuoi
+        printf("  Orientation: (%f, %f, %f)\n", 
+               scene->shapes[i].orientation.x, 
+               scene->shapes[i].orientation.y, 
+               scene->shapes[i].orientation.z);
+    }
+}

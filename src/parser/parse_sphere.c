@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 16:25:15 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 17:01:48 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/21 23:02:04 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,10 @@ static inline int sphere(const char **pcursor, t_vector *point, double *diameter
 		return (print_err_msg("Diametro mancante (atteso [0.0])"));
 	if (!parse_double(&cursor, diameter_value)) /* Diametro */
 		return (print_err_msg("Formato Diametro non valido"));
-    if (*diameter_value <= 0.0) /* non può essere negativo no? */
+    if (*diameter_value <= 0.0)
+    {
         return (print_err_msg("Valore Diametro negativo)"));
+    }
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
 		return (print_err_msg("Colore di 'sp' mancante (atteso R,G,B)"));
@@ -57,7 +59,9 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
     scene->n_spheres += 1;
         /* Controlli */
     if (scene == NULL || rest_of_line == NULL)
+    {
         return (err_msg("Error\nSPHERE", scene->n_spheres, "Parametri mancanti"));
+    }
 	cursor = skip_spaces(rest_of_line);
     if (sphere(&cursor, &point, &diameter_value, &color) == 1)
         return (err_msg("SPHERE", scene->n_spheres, ""), 1);
@@ -66,8 +70,10 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
     payload.sphere.radius = diameter_value;
     payload.sphere.color = color;
     /* 7) Append alla lista oggetti */
-    if (object_list_append(scene, OBJ_SPHERE, payload) != 0)
-        return 1; /* object_list_append ha già stampato l'errore */
+    if (object_list_append(scene, SPHERE, payload) != 0)
+    {
+        return (1); /* object_list_append ha già stampato l'errore */
+    }
 	return (0);
 }
 
@@ -115,7 +121,7 @@ int parse_sphere(t_scene *scene, char *rest_of_line)
 //     payload.sphere.radius = diameter_value;
 //     payload.sphere.color = color;
 //     /* 7) Append alla lista oggetti */
-//     if (object_list_append(scene, OBJ_SPHERE, payload) != 0)
+//     if (object_list_append(scene, SPHERE, payload) != 0)
 //         return 1; /* object_list_append ha già stampato l'errore */
 // 	return (0);
 // }

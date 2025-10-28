@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: francesca <francesca@student.42.fr>        +#+  +:+       +#+         #
+#    By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/18 11:58:42 by francesca         #+#    #+#              #
-#    Updated: 2025/10/06 23:13:28 by francesca        ###   ########.fr        #
+#    Updated: 2025/10/24 13:50:24 by jcarnebi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,8 @@ BLUE	= \033[0;34m
 
 NAME	= libft.a
 
-CC		= cc
-CFLAGS	= -Wall -Wextra -Werror
+CC		= gcc
+CFLAGS	= -Wall -Wextra -Werror -fPIE 
 
 SRC_DIR = .
 OBJS_DIR	=	obj/
@@ -77,13 +77,12 @@ OBJS := $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))
 # === Custom rule for colorized compilation === #
 $(OBJS_DIR)%.o: %.c
 	@mkdir -p $(OBJS_DIR)
-	@echo "$(BLUE)Compiling Libft $<...$(RESET)"
+	
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-all: $(NAME)
+all: $(NAME) 
 
 $(NAME): $(OBJS)
-	@echo "$(GREEN)Creating Libft$(NAME)...$(RESET)"
 	@ar rcs $(NAME) $(OBJS)
 
 clean:
@@ -91,9 +90,10 @@ clean:
 	@$(RM) -r $(OBJS_DIR)
 
 fclean: clean
-	@echo "$(RED)Removing Libft$(NAME)...$(RESET)"
+	@echo "$(RED)Removing $(NAME)...$(RESET)"
 	@$(RM) $(NAME)
 
 re: fclean all
 
+.SILENT:
 .PHONY: all bonus clean fclean re

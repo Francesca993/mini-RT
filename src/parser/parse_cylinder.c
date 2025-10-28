@@ -6,11 +6,11 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/10 11:31:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/20 17:01:46 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/21 12:05:13 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#import "miniRT.h"
+# include "miniRT.h"
 
 /*
  Cylinder:
@@ -114,8 +114,10 @@ int parse_cylinder(t_scene *scene, char *rest_of_line)
 	payload.cylinder.radius = radius;
 	payload.cylinder.height = height;
     /* 7) Append alla lista oggetti */
-    if (object_list_append(scene, OBJ_CYLINDER, payload) != 0)
-        return 1; /* object_list_append ha già stampato l'errore */
+    if (object_list_append(scene, CYLINDER, payload) != 0)
+        {
+			return (1);
+		} 
 	return (0);
 }
 

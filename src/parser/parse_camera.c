@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_camera.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 11:12:18 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/20 17:06:16 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/24 12:36:16 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,53 +109,95 @@ scene->cam.dir	direzione di vista	0.0	non si sposta, solo ruota
 light.pos	punto nello spazio	1.0	si sposta
 normal	vettore direzione	0.0	non si sposta
 */
+
+
 static inline int parse_camera(const char **pcursor, t_vector *position_value, t_vector *direction_value, int *fov_degrees_integer)
 {
-	const char *cursor;
-	
-	cursor = skip_spaces(*pcursor);
-	if (!parse_vec3(&cursor, position_value, 1.0)) /* Posizione: x,y,z, w → la posizione è un punto → w=1.0  perchè si sposta */
-		return (print_err_msg("Posizione camera non valida (atteso x,y,z senza spazi)"));
-	cursor = skip_spaces(cursor);
-	if (*cursor == '\0')
-		return (print_err_msg("Direzione camera mancante (atteso nx,ny,nz)"));
-	if (!parse_vec3(&cursor, direction_value, 0.0)) /* Direzione: nx,ny,nz, nw  → direzione è un vettore → w=0.0 perchè NON si sposta*/
-		return (print_err_msg("Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
-	if (!check_vec3direction(direction_value)) /* Componenti in [-1,1] */
-		return (err_msg("Camera", 1, ""));
-	/*  QUI SI PUO INSERIRE CALCOLO DI NORMALIZZAZIONE FATTO DALLA PARTE MATH */
-	cursor = skip_spaces(cursor);
-	if (*cursor == '\0')
-		return (print_err_msg("FOV della camera mancante"));
-	if (!parse_int(&cursor, fov_degrees_integer)) /* FOV in gradi [0..180]  */
-		return (print_err_msg("FOV della camera non valido (atteso intero)"));
-	if (*fov_degrees_integer < 0 || *fov_degrees_integer > 180)
-		return (print_err_msg("FOV della camera fuori range [0..180]"));
-	cursor = skip_spaces(cursor); /* Niente token extra */
-	if (*cursor != '\0')
-		return (print_err_msg("Token extra dopo il FOV della camera"));
-	return (0);
+    const char *cursor;
+    
+    cursor = skip_spaces(*pcursor);
+    
+    // Debug per la posizione della fotocamera
+    if (!parse_vec3(&cursor, position_value, 1.0)) /* Posizione: x,y,z, w → la posizione è un punto → w=1.0  perchè si sposta */
+        return (print_err_msg("Posizione camera non valida (atteso x,y,z senza spazi)"));
+    
+    // Debug per posizione letta
+    printf("Parsed Camera Position: (%f, %f, %f)\n", position_value->x, position_value->y, position_value->z);
+    
+    cursor = skip_spaces(cursor);
+    
+    if (*cursor == '\0')
+        return (print_err_msg("Direzione camera mancante (atteso nx,ny,nz)"));
+    
+    if (!parse_vec3(&cursor, direction_value, 0.0)) /* Direzione: nx,ny,nz, nw  → direzione è un vettore → w=0.0 perchè NON si sposta*/
+        return (print_err_msg("Direzione camera non valida (atteso nx,ny,nz senza spazi)"));
+    
+    // Debug per la direzione della fotocamera
+    printf("Parsed Camera Direction: (%f, %f, %f)\n", direction_value->x, direction_value->y, direction_value->z);
+    
+    if (!check_vec3direction(direction_value)) /* Componenti in [-1,1] */
+        return (err_msg("Camera", 1, ""));
+    
+    printf("Camera direction normalizzata: (%.2f, %.2f, %.2f)\n",
+	direction_value->x, direction_value->y, direction_value->z);
+
+        
+    cursor = skip_spaces(cursor);
+    
+    if (*cursor == '\0')
+        return (print_err_msg("FOV della camera mancante"));
+    
+    if (!parse_int(&cursor, fov_degrees_integer)) /* FOV in gradi [0..180]  */
+        return (print_err_msg("FOV della camera non valido (atteso intero)"));
+    
+    // Debug per il FOV
+    printf("Parsed Camera FOV: %d\n", *fov_degrees_integer);
+    
+    if (*fov_degrees_integer < 0 || *fov_degrees_integer > 180)
+        return (print_err_msg("FOV della camera fuori range [0..180]"));
+    
+    cursor = skip_spaces(cursor); /* Niente token extra */
+    
+    if (*cursor != '\0')
+        return (print_err_msg("Token extra dopo il FOV della camera"));
+    
+    return (0);
 }
 
-int	parse_camera_line(t_scene *scene, char *rest_of_line)
+int parse_camera_line(t_scene *scene, char *rest_of_line)
 {
-	const char	*cursor;
-	t_vector	position_value;
-	t_vector	direction_value;
-	int			fov_degrees_integer;
+    const char *cursor;
+    t_vector position_value;
+    t_vector direction_value;
+    int fov_degrees_integer;
 
-	if (scene == NULL || rest_of_line == NULL)
-		return (print_err_msg("Parametri mancanti per 'C'"));
-	if (scene->cam.present == true)
-		return (print_err_msg("Camera 'C' definita più di una volta"));
-	cursor = skip_spaces(rest_of_line);
-	if (parse_camera(&cursor, &position_value, &direction_value, &fov_degrees_integer) == 1)
-		return (1);
-	/* Salvataggio in scena */
-	scene->cam.pos = position_value;
-	scene->cam.dir = direction_value;
-	scene->cam.fov_deg = fov_degrees_integer;
-	scene->cam.present = true;
-	scene->n_camera += 1;
-	return (0);
+    if (scene == NULL || rest_of_line == NULL)
+        return (print_err_msg("Parametri mancanti per 'C'"));
+    
+    if (scene->cam.present == true)
+        return (print_err_msg("Camera 'C' definita più di una volta"));
+    
+    cursor = skip_spaces(rest_of_line);
+    
+    // Debug per l'inizio del parsing della fotocamera
+    printf("Parsing camera line: %s\n", rest_of_line);
+    
+    if (parse_camera(&cursor, &position_value, &direction_value, &fov_degrees_integer) == 1)
+        return (1);
+
+    // Debug per il salvataggio dei valori letti nella scena
+    printf("Saving Camera to Scene:\n");
+    printf("Camera Position: (%f, %f, %f)\n", position_value.x, position_value.y, position_value.z);
+    printf("Camera Direction: (%f, %f, %f)\n", direction_value.x, direction_value.y, direction_value.z);
+    printf("Camera FOV: %d\n", fov_degrees_integer);
+
+    // Salvataggio in scena
+    scene->cam.pos = position_value;
+    scene->cam.dir = direction_value;
+    scene->cam.fov_deg = fov_degrees_integer;
+    scene->cam.present = true;
+    scene->n_camera += 1;
+    
+    return (0);
 }
+

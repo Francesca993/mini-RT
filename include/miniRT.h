@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/17 15:08:30 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/27 15:57:30 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,39 +14,17 @@
 # define RT_H
 
 # include "../Libft/libft.h"
+# include "../mlx/mlx.h"
 # include "miniRT_struct.h"
 # include <math.h>
 # include <stdbool.h>
 # include <stddef.h>
 # include <stdint.h>
 # include <stdio.h>
-#include <limits.h>
+# include <limits.h>
+# include <pthread.h>
+# include "mathematical.h"
 
-/* ================= Config ================= */
-# ifndef WIDTH
-#  define WIDTH 1200
-# endif
-# ifndef HEIGHT
-#  define HEIGHT 800
-# endif
-
-# define EPSILON 1e-6
-# define PI 3.14159265358979323846
-
-/* ================= Keycodes ================= */
-# ifdef __APPLE__
-#  define KEY_ESC 53
-#  define KEY_LEFT 123
-#  define KEY_RIGHT 124
-#  define KEY_DOWN 125
-#  define KEY_UP 126
-# else
-#  define KEY_ESC 65307
-#  define KEY_LEFT 65361
-#  define KEY_RIGHT 65363
-#  define KEY_DOWN 65364
-#  define KEY_UP 65362
-# endif
 
 /* ================= Hook ================= */
 int			close_hook(void *param);
@@ -65,12 +43,13 @@ int			parse_int(const char **line_pointer, int *out_value); // Converte un inter
 
 /* ================= Debug ================= */
 void		debug_print_scene(const t_scene *scene_ptr, const char *title);
+void 	print_shapes(t_scene *scene);
 
 /* ================= Free ================= */
 void		free_array(char **arr);
-void		scene_reset(t_scene *scene);
 int			print_err_msg(const char *msg);
 int			err_msg(char *type, int num, const char *msg);
+int			scene_reset(t_scene *scene);
 
 /* ================= ft_skip_spaces ================= */
 int			ft_is_blank(const char *s);
@@ -103,7 +82,7 @@ int			lex_scan_check_and_count(t_scene *scene, char *line);
 /* ================= Linked List Utils ================= */
 void objlist_init(t_scene *scene);
 void objlist_destroy(t_scene *scene);
-t_objnode *objnode_new(t_objtype type, t_figures fig);
-int object_list_append(t_scene *scene, t_objtype object_type, t_figures object_payload);
+t_objnode *objnode_new(t_shape_type type, t_figures fig);
+int object_list_append(t_scene *scene, t_shape_type object_type, t_figures object_payload);
 
 #endif

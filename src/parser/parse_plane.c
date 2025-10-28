@@ -6,7 +6,7 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 15:11:55 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/17 16:53:07 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/21 12:05:38 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ int parse_plane(t_scene *scene, char *rest_of_line)
     payload.plane.normal = normal;
     payload.plane.color = color;
     /* 7) Append alla lista oggetti */
-    if (object_list_append(scene, OBJ_PLANE, payload) != 0)
-        return 1; /* object_list_append ha già stampato l'errore */
+    if (object_list_append(scene, PLANE, payload) != 0)
+	{
+        return (1); /* object_list_append ha già stampato l'errore */
+	}
 	return (0);
 }
 
