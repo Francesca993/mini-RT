@@ -6,11 +6,11 @@
 /*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 17:39:10 by jcarnebi          #+#    #+#             */
-/*   Updated: 2025/10/27 16:30:37 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:22:37 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "miniRT.h"
+#include "miniRT.h"
 
 /*
 restituisce la determinante della matrice 2x2
@@ -55,7 +55,8 @@ static void	submat3(t_mat2 *res, const t_mat3 *mat, int row, int col)
 
 /*
 Stesso concetto, ma qui 4×4 e togli una riga e una colonna per ottenere una 3×3
-Serve per calcolare cofattori e determinanti di matrici 4×4 da usare per l'inversa 
+Serve per calcolare cofattori e determinanti di matrici 4×4 da usare 
+per l'inversa 
  */
 void	submat4(t_mat3 *res, const t_mat4 *mat, int row, int col)
 {
@@ -84,7 +85,8 @@ void	submat4(t_mat3 *res, const t_mat4 *mat, int row, int col)
 }
 
 /*
-Un cofattore è il determinante della sotto-matrice, con un segno alternato a scacchiera
+Un cofattore è il determinante della sotto-matrice, 
+con un segno alternato a scacchiera
 Prendi la 2×2 calcoli il determinante
 Applichi segno + o − in base a posizione (row+col pari o dispari)
  */
@@ -99,7 +101,8 @@ static double	cofactor3(const t_mat3 *mat3, int row, int col)
 }
 
 /**
- Questa funzione serve perché per invertire una matrice 4×4, ho bisogno di tanti determinanti 3×3
+ Questa funzione serve perché per invertire una matrice 4×4, 
+ ho bisogno di tanti determinanti 3×3
  restituisce la determinante
  */
 double	det3(const t_mat3 *mat3)
@@ -110,7 +113,8 @@ double	det3(const t_mat3 *mat3)
 }
 /*
 NOTE PER ME
-L’inversa della matrice serve per “tornare al punto di partenza” → annullare traslazioni, rotazioni e scalamenti
+L’inversa della matrice serve per “tornare al punto di partenza” 
+→ annullare traslazioni, rotazioni e scalamenti
 
 il determinante dice:
 di quanto si “deforma” lo spazio (scalatura globale),
@@ -118,7 +122,7 @@ se la trasformazione inverte l’orientamento (det negativo = riflessione)
 
 Se det = 1  la trasformazione conserva volume/orientamento (come rotazioni)
 Se det = 2  raddoppia il volume
-Se det = 0  la matrice non è invertibile (perde dimensioni — tipo schiacciare un cubo in un )
+Se det = 0  la matrice non è invertibile 
 
 Determinante Quanto una matrice “deforma” lo spazio — se è invertibile
 Cofattore Determinante locale × segno +/− “a scacchiera”

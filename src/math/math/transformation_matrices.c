@@ -6,11 +6,11 @@
 /*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 16:16:43 by jcarnebi          #+#    #+#             */
-/*   Updated: 2025/10/14 18:22:13 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:55:09 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "miniRT.h"
+#include "miniRT.h"
 
 void	ft_bzero(void *s, size_t n);
 /*
@@ -18,6 +18,7 @@ iniziallizzazionte della matrice di traslazione
 Serve a spostare un oggetto nello spazio
 “prendi ogni punto dell’oggetto e aggiungi x, y, z”
  */
+
 void	translate_matrix(t_mat4 *mat, double x, double y, double z)
 {
 	ft_bzero(mat, sizeof(t_mat4));
@@ -118,6 +119,7 @@ Axis-angle → ruota attorno a qualsiasi direzione
 
 Regola generale per capire le matrici:
 Ultima colonna [0..2][3] → traslazione.
-Diagonal principale [0..2][0..2] → scaling se sono numeri >0, rotazione se contengono cos/sin.
+Diagonal principale [0..2][0..2] → scaling se sono numeri >0, 
+rotazione se contengono cos/sin.
 Ultima riga [3][0..3] → sempre [0,0,0,1] per le trasformazioni 3D.
 */

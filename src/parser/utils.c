@@ -6,13 +6,16 @@
 /*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/20 16:57:26 by francesca        ###   ########.fr       */
+/*   Updated: 2025/10/31 11:35:33 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-/* helper interno: consuma una virgola con spazi opzionali attorno e ritorna 0 se non trova la virgola*/
+/*
+Internal helper: consumes a comma with optional spaces around it and returns
+0 if it does not find the comma
+*/
 int	skip_comma(const char **input_ptr)
 {
 	const char	*cursor;
@@ -26,18 +29,22 @@ int	skip_comma(const char **input_ptr)
 	*input_ptr = cursor;
 	return (1);
 }
-/* Stampa messaggio di errore */
+
+/*
+Print error message
+*/
 int	print_err_msg(const char *msg)
 {
-	fprintf(stderr, "Error\n"); /* richiesto dal subject */
+	fprintf(stderr, "Error\n");
 	fprintf(stderr, "%s\n", msg);
 	return (1);
 }
 
-/* Stampa messaggio di errore più specifico */
+/*
+Print specifc error message
+*/
 int	err_msg(char *type, int num, const char *msg)
 {
-	// fprintf(stderr, "Error\n"); /* richiesto dal subject */
 	fprintf(stderr, "%s numero: %d, %s\n", type, num, msg);
 	return (1);
 }

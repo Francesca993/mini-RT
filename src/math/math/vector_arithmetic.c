@@ -6,11 +6,11 @@
 /*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 17:39:29 by jcarnebi          #+#    #+#             */
-/*   Updated: 2025/10/14 18:22:01 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:53:35 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "miniRT.h"
+#include "miniRT.h"
 
 /*
 Somma due vettori e salva il risultato in res
@@ -78,6 +78,7 @@ r = raggio riflesso (res)
 v⋅n = dot product → quanto il raggio “punta verso la superficie”
 otteniamo la direzione riflessa finale
 */
+
 void	reflect_vector(t_vector *res, t_vector *in_vector, t_vector *normal)
 {
 	scale_vec(res, normal, dot_product(in_vector, normal) * 2);
@@ -86,5 +87,6 @@ void	reflect_vector(t_vector *res, t_vector *in_vector, t_vector *normal)
 /*
 NOTA PER ME 
 Se w = 1 (punto) e fai add_vec , sposti il punto nello spazio.
-Se w = 0 (direzione) e fai scale_vec , cambi solo la lunghezza della freccia, non il punto
+Se w = 0 (direzione) e fai scale_vec , cambi solo la lunghezza della freccia, 
+non il punto
 */

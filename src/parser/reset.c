@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   reset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:11:03 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/23 19:44:05 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/11/02 14:22:49 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /* ---- HELPER ---- */
 /*
-Quello che fa è creare una variabile c di tipo  t_vector,
-assegnargli i valori r, g, b ai rispettivi campi, e restituirla.
+Creates a t_vector variable, assigns the x, y, z and w values to its fields,
+and returns it.
 */
 static inline t_vector	vector_make(double x, double y, double z, double w)
 {
@@ -27,9 +27,9 @@ static inline t_vector	vector_make(double x, double y, double z, double w)
 	v.w = w;
 	return (v);
 }
+
 /*
-Quello che fa è creare una variabile c di tipo t_color, assegnargli i valori r,
-g, b ai rispettivi campi, e restituirla.
+Creates a t_color with the given r, g, b, a components and returns it.
 */
 static inline t_color	color_make(double r, double g, double b, double t)
 {
@@ -42,95 +42,54 @@ static inline t_color	color_make(double r, double g, double b, double t)
 	return (c);
 }
 
-/*static inline void	camera_make(t_scene *scene)
+static inline void	camera_make(t_scene *scene)
 {
-	// posizione (punto) w=1.0, direzione (vettore) w=0.0 
 	scene->cam.pos = vector_make(0.0, 0.0, 0.0, 0.0);
 	scene->cam.dir = vector_make(0.0, 0.0, 0.0, 0.0);
-	// direzione di default “in avanti” 
 	scene->cam.fov = 0.0;
 	scene->cam.fov_deg = 0;
 	scene->cam.present = false;
 	scene->cam.pixel_size = 0.0;
 	scene->cam.half_width = 0.0;
 	scene->cam.half_height = 0.0;
-	// azzera le matrici transform/inv_trans 
 	ft_bzero(&scene->cam.transform, sizeof(scene->cam.transform));
 	ft_bzero(&scene->cam.inv_trans, sizeof(scene->cam.inv_trans));
-}*/
-
-static inline void camera_make(t_scene *scene)
-{
-    /* posizione (punto) w=1.0, direzione (vettore) w=0.0 */
-    scene->cam.pos = vector_make(0.0, 0.0, 0.0, 0.0);
-    scene->cam.dir = vector_make(0.0, 0.0, 0.0, 0.0);
-    /* direzione di default “in avanti” */
-    scene->cam.fov = 0.0;
-    scene->cam.fov_deg = 0;
-    scene->cam.present = false;
-    scene->cam.pixel_size = 0.0;
-    scene->cam.half_width = 0.0;
-    scene->cam.half_height = 0.0;
-
-    // Debug: Verifica i parametri inizializzati della fotocamera
-    printf("Camera Parameters Initialized - Pixel Size: %f, Half Width: %f, Half Height: %f\n", 
-            scene->cam.pixel_size, scene->cam.half_width, scene->cam.half_height);
-
-    /* azzera le matrici transform/inv_trans */
-    ft_bzero(&scene->cam.transform, sizeof(scene->cam.transform));
-    ft_bzero(&scene->cam.inv_trans, sizeof(scene->cam.inv_trans));
 }
-
-
 
 static inline void	settings_make(t_scene *scene)
 {
-	scene->settings.render_w = 0; // larghezza finale dell'immagine renderizzata
-	scene->settings.render_h = 0; // altezza finale dell'immagine renderizzata
-	scene->settings.edit_w = 0;  
-		// larghezza in modalità "edit" risoluzione ridotta, usata per debug
-	scene->settings.edit_h = 0;  
-		// altezza in modalità "edit" risoluzione ridotta, usata per debug
-	// scene->settings.edit_mode = false;
-		// se true → usa edit_w/edit_h “render veloce” invece che render_w/render_h quello finale (false)
-	// 				// flag letto dentro camera_init per scegliere quale risoluzione usare
+	scene->settings.render_w = 0;
+	scene->settings.render_h = 0;
+	scene->settings.edit_w = 0;
+	scene->settings.edit_h = 0;
 	scene->settings.reflection_depth = 0;
 }
 
 static inline int	light_init(t_scene *scene)
 {
-	/* libera eventuale blocco precedente */
 	if (scene->lights)
 	{
 		free(scene->lights);
 		scene->lights = NULL;
 	}
-	/* alloca array di 1 luce */
-	scene->lights = ft_calloc(1, sizeof *scene->lights); // sizeof(t_light)
+	scene->lights = ft_calloc(1, sizeof(*scene->lights));
 	if (!scene->lights)
 		return (print_err_msg("allocazione luce fallita"));
-	/* inizializza i campi della luce [0] */
 	scene->lights[0].position = vector_make(0.0, 0.0, 0.0, 0.0);
 	scene->lights[0].intensity = 0.0;
 	scene->lights[0].color = color_make(0.0, 0.0, 0.0, 0.0);
 	scene->lights[0].present = false;
 	return (0);
 }
-
-/* Inizializza/azzera completamente la scena,
-liberando eventuale storage precedente. */
+/* Initializes/resets the entire scene,
+   freeing any previously allocated storage. */
 int	scene_reset(t_scene *scene)
 {
-	// /* --- sicurezza memoria dinamica oggetti --- */
-	/* 1) pulizia lista precedente, se esiste */
 	objlist_destroy(scene);
-	/* 2) init lista vuota + azzera TUTTI I contatori */
 	objlist_init(scene);
-	/* --- Ambient --- */
 	scene->ambient.intensity = 0.0;
 	scene->ambient.color = color_make(0.0, 0.0, 0.0, 0.0);
 	scene->ambient.present = false;
-	/* --- Camera --- */
 	camera_make(scene);
 	if (light_init(scene) == 1)
 		return (0);

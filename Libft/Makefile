@@ -6,7 +6,7 @@
 #    By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/18 11:58:42 by francesca         #+#    #+#              #
-#    Updated: 2025/10/24 13:50:24 by jcarnebi         ###   ########.fr        #
+#    Updated: 2025/10/27 18:59:22 by jcarnebi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,8 @@ SRCS = ft_isalpha.c \
        ft_lstdelone.c \
        ft_lstclear.c \
        ft_lstiter.c \
-       ft_lstmap.c
+       ft_lstmap.c \
+       ft_swap.c
 
 
 OBJS := $(addprefix $(OBJS_DIR), $(SRCS:.c=.o))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT_struct.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/27 13:04:37 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/11/02 14:23:33 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # define MAX_SHAPES 50 //
 
 # define NUM_THREADS 16  //thread per disegnare (multi-thread rendering)
-# define KEY_ESC 65307
-
 
 /* --- Coordinate --- */
 // VETTORE 4D X,Y,Z SONO COORD NELLO SPAZIO W PER TRASFORMAZIONI OMOGENEE 
@@ -134,6 +132,8 @@ typedef struct s_camera
 	t_mat4		transform;      // Matrice che trasforma i punti dalla camera allo spazio mondo, quando vogliamo spostare o ruotare la camera
 	t_mat4		inv_trans;      // Matrice inversa di transform, Serve per trasformare i raggi dal mondo nello spazio locale della camera, fondamentale
 	bool		initialized;
+	double		theta;
+	double		phi;
 }			t_camera;
 
 /* --- Luce --- */
@@ -154,9 +154,9 @@ typedef struct s_light
 {
 	t_light_type	type;            // POINT o SPOT
 	t_vector		position;        // Dove si trova la luce - Serve per calcolare distanza, direzione, ombre
-	//t_vector		direction;       // (solo per SPOT) direzione della luce
-	//t_vector		init_direction;  // (per rotazioni iniziali, SPOT)
-	//t_mat4			added_rots;  // Rotazioni accumulate (SPOT)
+	t_vector		direction;       // (solo per SPOT) direzione della luce
+	t_vector		init_direction;  // (per rotazioni iniziali, SPOT)
+	t_mat4			added_rots;  // Rotazioni accumulate (SPOT)
 	double intensity; // [0..1]
 	t_color color;    // normalizzato 0..1
 	bool	present;
@@ -186,7 +186,7 @@ CYLINDER → intersezione raggio-cilindro
 typedef enum e_shape_type {
     SPHERE,
     PLANE,
-    CYLINDER							// Da implementare
+    CYLINDER
 }	t_shape_type;
 
 // DIVERSE PROPRIETà DEGLI OGGETI 
@@ -194,7 +194,7 @@ typedef struct s_shape_props
 {
 	double		radius;					// quanto è grande 
 	double		radius_squared;    		// serve per evitare di fare sqrt() inutili
-	//double		height;				// quanto è alto
+	double		height;				// quanto è alto il cinilndro
 	t_color		color;         		    
 	double		diffuse;           	//  come appare alla luce 
 	double		specular;          	//  come appare alla luce
@@ -202,6 +202,7 @@ typedef struct s_shape_props
 	double		reflectiveness;		// é riflettente
 	double		distance_from_origin;   // aggiunto per intersection Joy
 	t_vector		scale;
+	bool		highlighted;		// quale oggeto selezionato nella scena
 }	t_shape_props;
 
 typedef struct s_shape {
@@ -216,6 +217,8 @@ typedef struct s_shape {
      t_mat4 transf;						//matrice trasformazione oggetto → mondo
      t_mat4 inv_transf;					//inversa per trasformare i raggi mondo → spazio locale dell’oggetto (importantissima!)
 	 t_mat4 norm_transform;  			// per trasformare normali
+	 t_mat4	norm_transf;				// CYLD
+	 t_mat4	added_rots;
 
 } t_shape;
 
@@ -310,6 +313,24 @@ typedef struct s_look_at
 	bool		trigger;
 }	t_look_at;
 
+typedef struct s_keys		t_keys;
+struct s_keys
+{
+	bool	w;
+	bool	a;
+	bool	s;
+	bool	d;
+	bool	up;
+	bool	down;
+	bool	left;
+	bool	right;
+	bool	plus;
+	bool	minus;
+	bool	tab;
+	bool	r;
+	bool	o;
+};
+
 /* ───────────── Scena ───────────── */
 typedef struct s_scene
 {
@@ -339,6 +360,8 @@ typedef struct s_scene
 	t_display	*disp;
 	// Aggiunta temporanea per visione oggetto J
 	t_look_at	look_at;
+	int				shape_idx; // aggiunta j per toggle
+	t_keys			keys_held; // aggiunta j per tasti
 }			t_scene;
 
 /*

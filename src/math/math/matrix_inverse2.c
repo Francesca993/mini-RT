@@ -6,16 +6,17 @@
 /*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 18:43:53 by jcarnebi          #+#    #+#             */
-/*   Updated: 2025/10/14 18:22:21 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/10/30 12:58:07 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "miniRT.h"
+#include "miniRT.h"
 
 /*
 prendiamo una matrice 4x4
 Per trovare il cofattore in una cella tipo [row][col]
-Tagliamo la riga e la colonna della cella scelta otteniamo una matrice più piccola 3x3
+Tagliamo la riga e la colonna della cella scelta otteniamo 
+una matrice più piccola 3x3
 Calcoliamo il determinante della matrice 3x3
 Aggiungiamo un segno + o - alternato a scacchiera
 Se la somma row + col è pari mettiamo -determinante
@@ -49,7 +50,8 @@ static double	det4(const t_mat4 *mat4)
 }
 
 /*
-inverte matrice 4x4, in res salvo la matrice inversa mat è la matrice da invertire
+inverte matrice 4x4, in res salvo la matrice inversa mat 
+è la matrice da invertire
 Calcoliamo il determinante di tutta la matrice.
 Se il determinante è molto vicino a zero, matrice non invertibile
 Calcoliamo tutti i cofattori della matrice
@@ -62,7 +64,7 @@ void	mat_inverse(t_mat4 *res, const t_mat4 *mat)
 	int		row;
 
 	det = det4(mat);
-	if (fabs(det) < EPSILON) // Se det è molto vicino a zero, consideralo zero
+	if (fabs(det) < EPSILON)
 		return ;
 	row = 0;
 	while (row < 4)
@@ -77,7 +79,8 @@ void	mat_inverse(t_mat4 *res, const t_mat4 *mat)
 
 /*
 NOTE PER ME
-EPSILON costante tipo 0.000001 Serve per confrontare numeri in virgola mobile senza problemi di arrotondamento
+EPSILON costante tipo 0.000001 Serve per confrontare numeri 
+in virgola mobile senza problemi di arrotondamento
 usato perche if (det == 0) può fallire per via dei decimali
 
 fabs funzione della libreria <math.h>

@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   check_file.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:29:04 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/24 13:41:24 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/11/02 14:16:24 by francesca        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 #include <string.h>
 
-//Controlla che il file sia .rt
-//Check if the file has the extenctrion .rt
+/*
+Check if the file has the extenctrion .rt
+*/
 int has_rt_extension(const char *path)
 {
 	size_t len;
@@ -29,7 +30,9 @@ int has_rt_extension(const char *path)
 	return (0);
 }
 
-/* Ritorna 1 se id è uno dei token ammessi nel mandatory */
+/*
+Return 1 if id is one of the tokens allowed in mandatory.
+*/
 int is_valid_identifier(const char *id)
 {
     if (!id || !*id) return 0;
@@ -42,73 +45,50 @@ int is_valid_identifier(const char *id)
     return 0;
 }
 
-/* Controlla che i Valori delle coordinate della camra siano nei range ammessi
-dal subject:
-3D normalized orientation vector, 
-in the range [-1,1] 
-for each x, y, z axis: 0.0,0.0,1.0 */
+/*
+Verify that the camera’s orientation vector (x, y, z) is normalized
+and that each component is in the range [-1, 1]..
+*/
 int check_vec3direction(t_vector *direction_value)
 {
-    /* 2.a) Componenti in [-1,1] */
 	if (direction_value->x < -1.0 || direction_value->x > 1.0
 		|| direction_value->y < -1.0 || direction_value->y > 1.0
 		|| direction_value->z < -1.0 || direction_value->z > 1.0)
 		{
-			print_err_msg("3D normal vector of axis of cylinder fuori range [-1,1]");
+			print_err_msg("Normalized Vector axis of cylinder out range [-1,1]");
 			return (0);
 		}
 	if (direction_value->x == 0 && direction_value->y == 0 && direction_value->z == 0)
 	{
-		print_err_msg("Vettore di normalizzazione nullo");
+		print_err_msg("Normalized Vector null");
 		return (0);
 	}
 	normalize_vec(direction_value);
     return (1);
 }
-/* Check che ci siano Presenze obbligatorie e Unicita di A, C, L una sola volta. 
-mi serve qualcosa che a fine ciclo mi controlli che ci siano tutti e 3 e almeno uno tra gli oggetti
-per il momento stamperà solo un messaggio di errore sennò non andiamo piu avanti*/
-/*
-typedef struct s_scene
-{
-	// istanze reali (da riempire via parser)
-	t_ambient amb; // A (una sola nel mandatory)
-	t_camera cam;  // C (una sola nel mandatory)
-	t_light light; // L (una sola nel mandatory)
-	// contatori utili durante il parsing/validazione
-	int n_ambient; // per rilevare doppie dichiarazioni di A
-	int n_camera;  // per C
-	int n_lights;  // per L (bonus: servirà un array)
-	int		n_spheres;
-	int		n_planes;
-	int		n_cylinders;
-}			t_scene;
-*/
-
-/* Fa il check su presenze e unicità */
+/* 
+Check for presence and uniqueness.
+Minimum required: A, C, L.
+No duplicates (subjects: uppercase tokens must appear exactly once).
+At least one object must be present.
+ */
 int check_presence(t_scene *scene)
 {
 	if (scene == NULL)
-		return (print_err_msg("Error: scena non valida (NULL)"));
-
-	/* Presenza minima: A, C, L */
+		return (print_err_msg("Error: Invalid scene"));
 	if (scene->ambient.present == false || scene->n_ambient == 0)
-		return (print_err_msg("Error: Ambiente 'A' mancante"));
+		return (print_err_msg("Error: Missing 'A' ambient"));
 	if (scene->cam.present == false || scene->n_camera == 0)
-		return (print_err_msg("Error: Camera 'C' mancante"));
+		return (print_err_msg("Error: Missing 'C' camera"));
 	if (scene->lights->present == false || scene->n_lights == 0)
-		return (print_err_msg("Error: Luce 'L' mancante"));
-
-	/* Duplicati proibiti (subject: maiuscole una sola volta) */
+		return (print_err_msg("Error: Missing 'L' Light "));
 	if (scene->n_ambient > 1)
-		return (print_err_msg("Error: Ambiente 'A' definito piu' di una volta"));
+		return (print_err_msg("Error: Ambient 'A' defined more than once"));
 	if (scene->n_camera > 1)
-		return (print_err_msg("Error: Camera 'C' definita piu' di una volta"));
+		return (print_err_msg("Error: Camera 'C' defined more than once"));
 	if (scene->n_lights > 1)
-		return (print_err_msg("Error: Luce 'L' definita piu' di una volta"));
-
-	/* Presenza di almeno un oggetto */
+		return (print_err_msg("Error: Light 'L' defined more than once"));
 	if (scene->n_planes + scene->n_spheres + scene->n_cylinders == 0)
-		return(print_err_msg("Error: Deve esserci almeno un cy o pl o sp"));
+		return(print_err_msg("Error: There must be at least one 'cy', 'pl' or sp"));
 	return (0);
 }

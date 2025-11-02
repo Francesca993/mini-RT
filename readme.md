@@ -1,9 +1,3 @@
-<p align="center">
-  <img src="assets/IMG_1893.png" alt="Schermata" width="500">
-  <img src="assets/IMG_1894.png" alt="Schermata" width="500">
-  <img src="assets/IMG_1896.png" alt="Schermata" width="500">
-</p>
-
 Allora mi sono basata sul subject e ho creato per ogni elemento una struttura, e su ogni struttura ho messo ogni parametro che dovrebbe avere secondo il subject.
 All'inizio del mio main c'è una funzione di check sul file, che sia .rt. vorrei poi implementare una funzione unica che comprenderà anche quella, a cui si passerà l'fd e il file e lo controllerà prima di aprirlo. ma per il momento l'ho messa li. 
 ora sto stilando una lista completa di tutti i check da fare mentre carico il file e di tutto cio che devo controllare secondo il subject.

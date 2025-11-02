@@ -6,11 +6,11 @@
 /*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 15:54:23 by jcarnebi          #+#    #+#             */
-/*   Updated: 2025/10/17 09:54:59 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/10/30 13:23:56 by jcarnebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "miniRT.h"
+#include "miniRT.h"
 
 /*
  somma due colori il risultato in res, c1 è il primo colore  c2 il secondo
