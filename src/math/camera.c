@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 20:28:42 by jcarnebi          #+#    #+#             */
-/*   Updated: 2025/10/30 18:19:16 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:29:17 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ nello spazio locale della camera
 	double		aspect;
 	double		h;
 	double		w;
+	t_vector	from;
+	t_vector	up;
+	t_vector	from;
+	t_vector	up;
 
 	from.x = scene->cam.pos.x;
 	from.y = scene->cam.pos.y;
@@ -118,8 +122,7 @@ per sapere quanto spostarsi nello spazio 3D per passare da un pixel all’altro
 	}
 	camera->pixel_size = (camera->half_width * 2) / w;
 }*/
-//void	print_matrix(t_mat4 *mat);
-
+// void	print_matrix(t_mat4 *mat);
 void	calculate_camera_transform(t_scene *scene)
 {
 	t_vector	from;
@@ -140,8 +143,13 @@ void	calculate_camera_transform(t_scene *scene)
 
 /*void	print_matrix(t_mat4 *mat)
 {
-	int	i;
-	int	j;
+	int			i;
+	int			j;
+	t_vector	left;
+	t_vector	true_up;
+	t_vector	upn;
+	t_mat4		orientation;
+	t_mat4		translation;
 
 	printf("Print matrix:\n");
 	i = 0;
@@ -158,7 +166,89 @@ void	calculate_camera_transform(t_scene *scene)
 		i++;
 	}
 }*/
+static inline void	init_fallback_upn(t_vector *upn, const t_vector *forward,
+		t_vector *left)
+{
+	upn->x = 0;
+	upn->y = 0;
+	upn->z = 1;
+	upn->w = 0;
+	cross_product(left, forward, upn);
+}
 
+static inline void	init_orientation(t_mat4 *orientation, const t_vector *left,
+		const t_vector *true_up, const t_vector *forward)
+{
+	(*orientation)[0][0] = left->x;
+	(*orientation)[0][1] = left->y;
+	(*orientation)[0][2] = left->z;
+	(*orientation)[1][0] = true_up->x;
+	(*orientation)[1][1] = true_up->y;
+	(*orientation)[1][2] = true_up->z;
+	(*orientation)[2][0] = forward->x * -1;
+	(*orientation)[2][1] = forward->y * -1;
+	(*orientation)[2][2] = forward->z * -1;
+	(*orientation)[3][3] = 1;
+}
+
+void	view_transform(t_mat4 *res, const t_vector *from, const t_vector *up,
+		const t_vector *forward)
+{
+	t_vector	left;
+	t_vector	true_up;
+	t_vector	upn;
+	t_mat4		orientation;
+	t_mat4		translation;
+
+	upn = *up;
+	normalize_vec(&upn);
+	cross_product(&left, forward, &upn);
+	if (vec_magnitude(&left) < EPSILON)
+		init_fallback_upn(&upn, forward, &left);
+	normalize_vec(&left);
+	cross_product(&true_up, &left, forward);
+	normalize_vec(&true_up);
+	ft_bzero(&orientation, sizeof(t_mat4));
+	init_orientation(&orientation, &left, &true_up, forward);
+	translate_matrix(&translation, from->x * -1, from->y * -1, from->z * -1);
+	mat_multiply(res, &orientation, &translation);
+}
+
+/*
+void	view_transform(t_mat4 *res, const t_vector *from, const t_vector *up,
+		const t_vector *forward)
+{
+	t_vector	left;
+	t_vector	true_up;
+	t_vector	upn;
+	t_mat4		orientation;
+	t_mat4		translation;
+
+	upn = *up;
+	normalize_vec(&upn);
+	cross_product(&left, forward, &upn);
+	if (vec_magnitude(&left) < EPSILON)
+		init_fallback_upn(&upn, forward, &left);
+	normalize_vec(&left);
+	cross_product(&true_up, &left, forward);
+	normalize_vec(&true_up);
+	ft_bzero(&orientation, sizeof(t_mat4));
+	orientation[0][0] = left.x;
+	orientation[0][1] = left.y;
+	orientation[0][2] = left.z;
+	orientation[1][0] = true_up.x;
+	orientation[1][1] = true_up.y;
+	orientation[1][2] = true_up.z;
+	orientation[2][0] = forward->x * -1;
+	orientation[2][1] = forward->y * -1;
+	orientation[2][2] = forward->z * -1;
+	orientation[3][3] = 1;
+	translate_matrix(&translation, from->x * -1, from->y * -1, from->z * -1);
+	mat_multiply(res, &orientation, &translation);
+}
+	*/
+
+/*
 void	view_transform(t_mat4 *res, const t_vector *from, const t_vector *up,
 		const t_vector *forward)
 {
@@ -188,6 +278,7 @@ void	view_transform(t_mat4 *res, const t_vector *from, const t_vector *up,
 	translate_matrix(&translation, from->x * -1, from->y * -1, from->z * -1);
 	mat_multiply(res, &orientation, &translation);
 }
+*/
 
 void	camera_init(t_camera *camera, t_scene *scene)
 {

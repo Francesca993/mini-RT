@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/17 15:11:55 by francesca         #+#    #+#             */
-/*   Updated: 2025/11/02 14:21:32 by francesca        ###   ########.fr       */
+/*   Updated: 2025/11/03 16:51:46 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@
 0.0,1.0,0.0
 ∗ R,G,B colors in the range [0-255]: 0,0,225
 */
-static inline int plane(const char **pcursor, t_vector *point, t_vector *normal, t_color *color)
+static inline int	plane(const char **pcursor, t_vector *point,
+		t_vector *normal, t_color *color)
 {
-	const char *cursor;
+	const char	*cursor;
 
 	cursor = skip_spaces(*pcursor);
-	
 	if (!parse_vec3(&cursor, point, 1.0))
 		return (print_err_msg("Invalid position"));
 	cursor = skip_spaces(cursor);
 	if (*cursor == '\0')
-		return (print_err_msg("3D normalized normal vector mancante (atteso nx,ny,nz)"));
+		return (print_err_msg("3D normalized normal vector"
+				" missing (expected nx,ny,nz)"));
 	if (!parse_vec3(&cursor, normal, 0.0))
 		return (print_err_msg("missing 3D normalized normal vector"));
 	if (!check_vec3direction(normal))
@@ -41,31 +42,30 @@ static inline int plane(const char **pcursor, t_vector *point, t_vector *normal,
 		return (print_err_msg("Invalid format color"));
 	cursor = skip_spaces(cursor);
 	if (*cursor != '\0')
-		return (print_err_msg ("Token extra after color."));
+		return (print_err_msg("Token extra after color."));
 	return (0);
 }
 
-int parse_plane(t_scene *scene, char *rest_of_line)
+int	parse_plane(t_scene *scene, char *rest_of_line)
 {
-    const char	*cursor;
+	const char	*cursor;
 	t_vector	point;
 	t_vector	normal;
-    t_figures   payload;
-    t_color		color;
+	t_figures	payload;
+	t_color		color;
 
 	scene->n_planes += 1;
-	
 	if (scene == NULL || rest_of_line == NULL)
 		return (err_msg("Error\nPLANE", scene->n_planes, "Missing parameters"));
 	cursor = skip_spaces(rest_of_line);
 	if (plane(&cursor, &point, &normal, &color) == 1)
 		return (err_msg("PLANE", scene->n_planes, ""), 1);
-    payload.plane.point = point;
-    payload.plane.normal = normal;
-    payload.plane.color = color;
-    if (object_list_append(scene, PLANE, payload) != 0)
+	payload.plane.point = point;
+	payload.plane.normal = normal;
+	payload.plane.color = color;
+	if (object_list_append(scene, PLANE, payload) != 0)
 	{
-        return (1);
+		return (1);
 	}
 	return (0);
 }

@@ -1,0 +1,24 @@
+#C 0,0,-5   0,0,1   70 camera lungo asse Z
+#Asse X: C 10,0,0 -1,0,0 70
+#Asse Y: C 0,10,0 0,-1,0 70
+#C 0,10,0   -0.001,-0.9999995,0   70
+
+FILE 11
+camera in una posizione generica (non su assi/diagonali) 
+Direzione verso l’origine = (-3,-5,2)
+Direzione = (4,-2,-7) ⇒ normalizzata
+
+Che cosa ti chiede la correzione (il “paragrafo camera”)
+Di dimostrare che la tua camera e il tuo ray generation funzionano in casi semplici ma “diagnostici”.
+Fai 4 render, e in tutti e 4 la camera guarda l’origine (0,0,0):
+Posizionata lungo l’asse X (es. P=(t,0,0), t≠0), direzione verso l’origine.
+Lungo l’asse Y, direzione verso l’origine.
+Lungo l’asse Z, direzione verso l’origine.
+In una posizione generica (non sugli assi/diagonali), direzione verso l’origine.
+Se ogni immagine è visibile e senza glitch, la sezione è ok.
+
+Vuoi guardare un punto preciso (es. l’origine)?
+Allora calcoli la direzione così:
+T = (0,0,0)                # punto da guardare (target)
+dir_raw = T - P = (-px, -py, -pz)
+dir = normalize(dir_raw)   # metti questo come nx,ny,nz

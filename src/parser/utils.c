@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 09:25:56 by francesca         #+#    #+#             */
-/*   Updated: 2025/10/31 11:35:33 by francesca        ###   ########.fr       */
+/*   Updated: 2025/11/03 16:54:32 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,19 @@ int	err_msg(char *type, int num, const char *msg)
 {
 	fprintf(stderr, "%s numero: %d, %s\n", type, num, msg);
 	return (1);
+}
+
+/*
+Creates a t_vector variable, assigns the x, y, z and w values to its fields,
+and returns it.
+*/
+t_vector	vector_make(double x, double y, double z, double w)
+{
+	t_vector	v;
+
+	v.x = x;
+	v.y = y;
+	v.z = z;
+	v.w = w;
+	return (v);
 }

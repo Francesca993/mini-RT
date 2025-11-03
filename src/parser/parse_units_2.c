@@ -3,66 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   parse_units_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 11:44:55 by francesca         #+#    #+#             */
-/*   Updated: 2025/11/02 14:21:57 by francesca        ###   ########.fr       */
+/*   Updated: 2025/11/03 16:52:31 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
-//SE FUNZIONA LA CANCELLI
+static inline void	init_parameters(t_numparse *n)
+{
+	n->sign = 1;
+	n->val = 0.0;
+	n->frac = 0.0;
+	n->scale = 1.0;
+	n->ndigits = 0;
+	n->nfrac = 0;
+}
+
+static inline void	parse_numdoub(t_numparse *n)
+{
+	if (*n->cursor == '+' || *n->cursor == '-')
+	{
+		if (*n->cursor == '-')
+			n->sign = -1;
+		n->cursor++;
+	}
+	while (ft_isdigit((unsigned char)*n->cursor))
+	{
+		n->val = n->val * 10.0 + (double)(*n->cursor - '0');
+		n->cursor++;
+		n->ndigits++;
+	}
+	if (*n->cursor == '.')
+	{
+		n->cursor++;
+		while (ft_isdigit((unsigned char)*n->cursor))
+		{
+			n->frac = n->frac * 10.0 + (double)(*n->cursor - '0');
+			n->scale = n->scale * 10.0;
+			n->cursor++;
+			n->nfrac++;
+		}
+	}
+}
 
 int	parse_double(const char **line, double *out)
 {
-	const char	*n_line;
-	int			sign;
-	double		val;
-	double		frac;
-	double		scale;
-	int			ndigits;
-	int			nfrac;
-	double		fractional_part;
+	t_numparse	n;
+	double		fractional;
 
-	n_line = skip_spaces(*line);
-	sign = 1;
-	val = 0.0;
-	frac = 0.0;
-	scale = 1.0;
-	ndigits = 0;
-	nfrac = 0;
-	if (*n_line == '+' || *n_line == '-')
-	{
-		if (*n_line == '-')
-			sign = -1;
-		n_line++;
-	}
-	while (ft_isdigit(*n_line))
-	{
-		val = val * 10.0 + (double)(*n_line - '0');
-		n_line++;
-		ndigits++;
-	}
-	if (*n_line == '.')
-	{
-		n_line++;
-		while (ft_isdigit(*n_line))
-		{
-			frac = frac * 10.0 + (double)(*n_line - '0');
-			scale *= 10.0;
-			n_line++;
-			nfrac++;
-		}
-	}
-	if (ndigits == 0 && nfrac == 0)
+	fractional = 0.0;
+	n.cursor = skip_spaces(*line);
+	init_parameters(&n);
+	parse_numdoub(&n);
+	if (n.ndigits == 0 && n.nfrac == 0)
 		return (0);
-	if (nfrac == 0)
-		fractional_part = 0.0;
+	if (n.nfrac > 0)
+		fractional = n.frac / n.scale;
 	else
-		fractional_part = frac / scale;
-	*out = sign * (val + fractional_part);
-	*line = n_line;
+		fractional = 0.0;
+	*out = n.sign * (n.val + fractional);
+	*line = n.cursor;
 	return (1);
 }
 

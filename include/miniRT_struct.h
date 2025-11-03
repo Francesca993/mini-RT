@@ -3,388 +3,320 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT_struct.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/30 15:29:54 by francesca         #+#    #+#             */
-/*   Updated: 2025/11/02 14:23:33 by francesca        ###   ########.fr       */
+/*   Updated: 2025/11/03 17:08:04 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINI_RT_STRUCT_H
-# define MINI_RT_STRUCT_H
+#ifndef MINIRT_STRUCT_H
+# define MINIRT_STRUCT_H
 
 # include <stdbool.h>
- #include <stddef.h>
+# include <stddef.h>
 
- # define MAX_LIGHTS 10 // ARRAY STATICI PER TESTARE PHONG SENZA MALLOCCARE
-# define MAX_SHAPES 50 //
+# define MAX_LIGHTS 100
+# define MAX_SHAPES 100
 
-# define NUM_THREADS 16  //thread per disegnare (multi-thread rendering)
+# define NUM_THREADS 16
 
-/* --- Coordinate --- */
-// VETTORE 4D X,Y,Z SONO COORD NELLO SPAZIO W PER TRASFORMAZIONI OMOGENEE 
-// usato per Posizioni degli oggetti, Direzioni dei raggi, Normali
+typedef struct s_numparse
+{
+	const char					*cursor;
+	int							sign;
+	double						val;
+	double						frac;
+	double						scale;
+	int							ndigits;
+	int							nfrac;
+}								t_numparse;
+
+/* --- COORDINATES --- */
 typedef struct s_vector
 {
-	double	x;
-	double	y;
-	double	z;
-	double	w;
-}			t_vector;
+	double						x;
+	double						y;
+	double						z;
+	double						w;
+}								t_vector;
 
-/* --- Colori --- */
-// Colori interni in spazio lineare [0..1]
-/*
-PERCHE' RGB IN DOUBLE
-Quando fai i calcoli di luce, riflessione, ombreggiature, ecc.,
-il programma deve moltiplicare e sommare i colori —
-e deve farlo con precisione decimale, non con numeri interi.
-Se hai un’illuminazione del 40% (ratio = 0.4)
-e un colore rosso 255,0,0
-allora il colore illuminato sarà: 255 * 0.4 = 102 
-Ma se tu usassi solo interi (0 o 1), perderesti tutta la sfumatura.
-*/
-/*
-Rappresenta un colore 
-r = rosso
-g = verde
-b = blue
-a = trasparenza
-*/
+/* --- COLORS --- */
 typedef struct s_color
 {
-	double	r;
-	double	g;
-	double	b;
-	double	a;
-}			t_color;
+	double						r;
+	double						g;
+	double						b;
+	double						a;
+}								t_color;
 
-typedef struct s_shape t_shape; //  AGGIUNGI QUESTA RIGA per compilazione
-//CAMBIA ORDINE STRUTTURE
-//contiene tutti i componenti della luce per un oggetto serve per calcolare quanto luce arriva su un punto di un oggetto
-typedef struct s_phong		t_phong;
-struct	s_phong
+typedef struct s_shape			t_shape;
+typedef struct s_phong			t_phong;
+struct							s_phong
 {
-	t_color	effective_color;		//il colore dell’oggetto dopo essere stato "influenzato" dalla luce
-	t_color	diffuse;				//la parte di luce diffusa, che colpisce la superficie e si "spalma"
-	t_color	specular;				//la parte riflessa (i punti brillanti)
-	t_color	ambient;				//la luce di base che illumina tutto (anche in ombra)
+	t_color						effective_color;
+	t_color						diffuse;
+	t_color						specular;
+	t_color						ambient;
 };
 
-//RAY - un raggio ha un punto di partenza e una direzione
-typedef struct s_ray t_ray;
-struct s_ray
+typedef struct s_ray			t_ray;
+struct							s_ray
 {
-	t_vector	origin;    // punto di partenza del raggio (w = 1 se è posizione)
-	t_vector	dir;       // direzione del raggio (w = 0), generalmente normalizzata
+	t_vector					origin;
+	t_vector					dir;
 };
 
-//INTERSEZIONI - intersezione è quando il raggio colpisce qualcosa
-typedef struct s_intersect t_intersection;
-struct s_intersect
+/*-- INTERSECTIONS --*/
+typedef struct s_intersect		t_intersection;
+struct							s_intersect
 {
-	double		time;       // ci dice quando - parametro t lungo il raggio: punto = origin + t * dir 
-	t_shape		*shape;     // ci dice cosa è stato colpito - puntatore alla shape colpita (non copia!)
-	t_vector	point;      // punto di impatto , usato per illuminazione - punto di intersezione nello spazio mondo (può essere popolato più tardi)
-	t_vector	normal;     // usato per illuminazione - normale della superficie al punto (già trasformata in world space)
-	t_vector	eye;        // usato per illuminazione - vettore dalla superficie verso la camera (eye = -ray.dir) dal punto verso la camera
-	t_vector	over_point; // punto leggermente spostato lungo la normale per evitare artefatti di ombre
-	t_vector	reflect_vec;// vettore riflesso, utile per calcolare riflessioni
-	bool		inside;     // true se il raggio partiva dall'interno dell'oggetto
+	double						time;
+	t_shape						*shape;
+	t_vector					point;
+	t_vector					normal;
+	t_vector					eye;
+	t_vector					over_point;
+	t_vector					reflect_vec;
+	bool						inside;
 };
 
-// LISTA DI INTERSEZIONI  - Tiene traccia di tutti i punti colpiti 
-typedef struct s_intersections t_intersections;
-struct s_intersections
+typedef struct s_intersections	t_intersections;
+struct							s_intersections
 {
-	t_intersection	arr[200];  // array statico per le intersezioni trovate (sufficiente per scene semplici) - una sfera ha 2 punti di intersezione entrata e uscita
-	int				count;     // quanti elementi validi ci sono in arr (inizializzare a 0 prima dell'uso) quanti impatti 
+	t_intersection				arr[200];
+	int							count;
 };
 
-/* --- Ambiente --- */
-// Ambient lighting (A ratio [0..1], RGB [0..255] -> normalizzati)
+/* --- AMBIENT --- */
 typedef struct s_ambient
 {
-	double	intensity; // Valore da 0.0 a 1.0 (quanto è forte la luce ambiente)
-	t_color color; // normalizzato 0..1
-	bool present;  // per validare che A compaia una sola volta
-}			t_ambient;
+	double						intensity;
+	t_color						color;
+	bool						present;
+}								t_ambient;
 
-// MATRICI 
-typedef double			t_mat4[4][4];          // trasformazioni 3D (traslazioni, rotazioni, scaling)
-typedef double			t_mat3[3][3];          // utile per determinanti, inversione parziale
-typedef double			t_mat2[2][2];          // minor uso, solo per calcoli di supporto
+/*-- MATRICES -- */
+typedef double					t_mat4[4][4];
+typedef double					t_mat3[3][3];
+typedef double					t_mat2[2][2];
 
-/* --- Camera --- */
-// Camera (C pos, dir normalizzata, FOV in gradi [0..180])
-// come un occhio nello spazio 3D
-// Tutto quello che serve per generare i raggi lo metto dentro questa struttura
+/* --- CAMERA --- */
 typedef struct s_camera
 {
-	t_vector	pos;
-	t_vector 	dir;     // normalizzata
-	int    		fov_deg;    // come da file .rt (per debug/log) DA TOGLIERE  e lasciare solo double fov
-	double		fov;            // Field of view, campo visivo della camera, in radianti quanto zoommato
-	bool		present;
-	double		pixel_size;     // Dimensione di un pixel nello spazio 3D proiettato sulla scena, per sapere quanto spostarsi nello spazio per passare da un pixel all’altro
-	double		half_width;     // Metà larghezza e altezza del viewport (la “finestra” della camera) in unità della scena, per centrare i raggi
-	double		half_height;
-	t_mat4		transform;      // Matrice che trasforma i punti dalla camera allo spazio mondo, quando vogliamo spostare o ruotare la camera
-	t_mat4		inv_trans;      // Matrice inversa di transform, Serve per trasformare i raggi dal mondo nello spazio locale della camera, fondamentale
-	bool		initialized;
-	double		theta;
-	double		phi;
-}			t_camera;
+	t_vector					pos;
+	t_vector					dir;
+	int							fov_deg;
+	double						fov;
+	bool						present;
+	double						pixel_size;
+	double						half_width;
+	double						half_height;
+	t_mat4						transform;
+	t_mat4						inv_trans;
+	bool						initialized;
+	double						theta;
+	double						phi;
+}								t_camera;
 
-/* --- Luce --- */
-
-/*
-Tipo di luce
- */
-typedef enum e_light_type	t_light_type;
-enum e_light_type
+/* --- LIGHT --- */
+typedef enum e_light_type		t_light_type;
+enum							e_light_type
 {
-	POINT,                                          //luce puntiforme (una lampadina), emette luce in tutte le direzioni.
-	//SPOT                                            //luce direzionale con angolo di apertura (tipo torcia o faretto), direzionale e con cutoff
+	POINT,
+	// SPOT
 };
 
-//Fonte di luce 
-// Light (L pos, intensità [0..1], colore)
+/* --LIGHT SOURCE-- */
 typedef struct s_light
 {
-	t_light_type	type;            // POINT o SPOT
-	t_vector		position;        // Dove si trova la luce - Serve per calcolare distanza, direzione, ombre
-	t_vector		direction;       // (solo per SPOT) direzione della luce
-	t_vector		init_direction;  // (per rotazioni iniziali, SPOT)
-	t_mat4			added_rots;  // Rotazioni accumulate (SPOT)
-	double intensity; // [0..1]
-	t_color color;    // normalizzato 0..1
-	bool	present;
-}			t_light;
-/*
-Luce ambientale 
-La luce ambientale simula la luce diffusa che colpisce tutto, 
-anche le zone non direttamente illuminate.
- */
+	t_light_type				type;
+	t_vector					position;
+	t_vector					direction;
+	t_vector					init_direction;
+	t_mat4						added_rots;
+	double						intensity;
+	t_color						color;
+	bool						present;
+}								t_light;
 
-/* --- Oggetti (solo struct, niente logica) --- */
-//NOTA:
-/*
-Questo è molto più flessibile rispetto all’approccio “unione”,
-perché tutte le shape condividono una struttura comune, 
-e l’enum decide solo quale logica usare, non quale union leggere
-*/
+typedef enum e_shape_type
+{
+	SPHERE,
+	PLANE,
+	CYLINDER
+}								t_shape_type;
 
-
-/*
-identifica il tipo geometrico della forma
-quando ho un array generico di t_shape devo capire quale funzione di intersezione chiamare
-SPHERE → intersezione raggio-sfera
-PLANE → intersezione raggio-piano
-CYLINDER → intersezione raggio-cilindro
- */
-typedef enum e_shape_type {
-    SPHERE,
-    PLANE,
-    CYLINDER
-}	t_shape_type;
-
-// DIVERSE PROPRIETà DEGLI OGGETI 
+/* OBJECTS PROPERTY */
 typedef struct s_shape_props
 {
-	double		radius;					// quanto è grande 
-	double		radius_squared;    		// serve per evitare di fare sqrt() inutili
-	double		height;				// quanto è alto il cinilndro
-	t_color		color;         		    
-	double		diffuse;           	//  come appare alla luce 
-	double		specular;          	//  come appare alla luce
-	double		shininess;         	
-	double		reflectiveness;		// é riflettente
-	double		distance_from_origin;   // aggiunto per intersection Joy
-	t_vector		scale;
-	bool		highlighted;		// quale oggeto selezionato nella scena
-}	t_shape_props;
+	double						radius;
+	double						radius_squared;
+	double						height;
+	t_color						color;
+	double						diffuse;
+	double						specular;
+	double						shininess;
+	double						reflectiveness;
+	double						distance_from_origin;
+	t_vector					scale;
+	bool						highlighted;
+}								t_shape_props;
 
-typedef struct s_shape {
-    t_shape_type type;      			//dice che tipo di oggetto è (sphere, plane, ecc.)
-	int id;   							// ???? identificativo univoco (utile per debug, picking, editor)
-	t_shape_props props;        		// tutte le proprietà fisiche/estetiche definite sopra
-    t_vector origin;        			// centro, base o punto sul piano , la posizione
-    t_vector orientation;   			// la direzione principale (es. normale di un piano, asse di un cilindro)
+typedef struct s_shape
+{
+	t_shape_type				type;
+	int							id;
+	t_shape_props				props;
+	t_vector					origin;
+	t_vector					orientation;
+	t_mat4						transf;
+	t_mat4						inv_transf;
+	t_mat4						norm_transform;
+	t_mat4						norm_transf;
+	t_mat4						added_rots;
 
-	// Questi sopra mi bastano per calcolare intersezioni ray–shape
+}								t_shape;
 
-     t_mat4 transf;						//matrice trasformazione oggetto → mondo
-     t_mat4 inv_transf;					//inversa per trasformare i raggi mondo → spazio locale dell’oggetto (importantissima!)
-	 t_mat4 norm_transform;  			// per trasformare normali
-	 t_mat4	norm_transf;				// CYLD
-	 t_mat4	added_rots;
-
-} t_shape;
-
-/* --- Sphere --- */
+/* --- SPHERE --- */
 typedef struct s_sphere
 {
-	t_vector center; // centro
-	double radius; // diametro/2, precomputato dal parser
-	t_color color; // 0..1
-}			t_sphere;
+	t_vector					center;
+	double						radius;
+	t_color						color;
+}								t_sphere;
 
-/* --- Plane --- */
+/* --- PLANE --- */
 typedef struct s_plane
 {
-	t_vector point;  // un punto sul piano
-	t_vector normal; // normalizzata
-	t_color color; // 0..1
-}			t_plane;
+	t_vector					point;
+	t_vector					normal;
+	t_color						color;
+}								t_plane;
 
-/* --- Cylinder --- */
+/* --- CYLINDER --- */
 typedef struct s_cylinder
 {
-	t_vector base;   // punto base lungo l'asse (convenz.
-	t_vector axis;   // direzione normalizzata
-	double radius; // diametro/2
-	double height; // altezza finita
-	t_color color; // 0..1
-}			t_cylinder;
+	t_vector					base;
+	t_vector					axis;
+	double						radius;
+	double						height;
+	t_color						color;
+}								t_cylinder;
 
-/* ───────────── Contenitore generico ───────────── */
+/* -- GENERIC CONTAINER -- */
 
 typedef union u_figures
 {
-	t_sphere			sphere;
-	t_plane				plane;
-	t_cylinder			cylinder;
-}						t_figures;
+	t_sphere					sphere;
+	t_plane						plane;
+	t_cylinder					cylinder;
+}								t_figures;
 
-/* Vector di oggetti con due array paralleli */
-typedef struct s_objnode 
+typedef struct s_objnode
 {
-   	t_shape_type      type;   // OBJ_SPHERE / OBJ_PLANE / OBJ_CYLINDER 
-    t_figures         fig;    // union con i dati dell’oggetto 
-
-//	t_vec orientation;  // <-- nuovo
-	
-	t_shape_props props;
-	t_vector origin;
-    struct s_objnode *next;
-} t_objnode;
-
+	t_shape_type				type;
+	t_figures					fig;
+	t_shape_props				props;
+	t_vector					origin;
+	struct s_objnode			*next;
+}								t_objnode;
 
 typedef struct s_settings
 {
-	int	disp_w;
-	int disp_h;
-	int render_w;   // larghezza finale dell'immagine renderizzata
-	int render_h;   // altezza finale dell'immagine renderizzata
-	int edit_w;     // larghezza in modalità "edit" risoluzione ridotta, usata per debug
-	int edit_h;     // altezza in modalità "edit" risoluzione ridotta, usata per debug
-	bool edit_mode; // se true → usa edit_w/edit_h “render veloce” invece che render_w/render_h quello finale (false)
-					// flag letto dentro camera_init per scegliere quale risoluzione usare
+	int							disp_w;
+	int							disp_h;
+	int							render_w;
+	int							render_h;
+	int							edit_w;
+	int							edit_h;
+	bool						edit_mode;
+	int							reflection_depth;
+}								t_settings;
 
-	int	reflection_depth;
-} t_settings;
-
-/*
-Informazioni sulla finestra e immagine di output MLX
- */
-typedef struct s_display t_display;
-struct s_display
+/* WINDOWS MLX */
+typedef struct s_display		t_display;
+struct							s_display
 {
-	void	*mlx;
-	void	*win;
-	void	*display_img;
-	char	*disp_addr;
-	int		bpp;
-	int		line_length;
-	int		endian;
+	void						*mlx;
+	void						*win;
+	void						*display_img;
+	char						*disp_addr;
+	int							bpp;
+	int							line_length;
+	int							endian;
 };
 
 typedef struct s_look_at
 {
-	t_vector	final_pos;
-	t_vector	final_dir;
-	t_vector	current_dir;
-	t_vector	initial_orientation;
-	t_vector	pos_diff;
-	t_vector	dir_diff;
-	double		step_amount;
-	int			step_num;
-	bool		trigger;
-}	t_look_at;
+	t_vector					final_pos;
+	t_vector					final_dir;
+	t_vector					current_dir;
+	t_vector					initial_orientation;
+	t_vector					pos_diff;
+	t_vector					dir_diff;
+	double						step_amount;
+	int							step_num;
+	bool						trigger;
+}								t_look_at;
 
-typedef struct s_keys		t_keys;
-struct s_keys
+typedef struct s_keys			t_keys;
+struct							s_keys
 {
-	bool	w;
-	bool	a;
-	bool	s;
-	bool	d;
-	bool	up;
-	bool	down;
-	bool	left;
-	bool	right;
-	bool	plus;
-	bool	minus;
-	bool	tab;
-	bool	r;
-	bool	o;
+	bool						w;
+	bool						a;
+	bool						s;
+	bool						d;
+	bool						up;
+	bool						down;
+	bool						left;
+	bool						right;
+	bool						plus;
+	bool						minus;
+	bool						tab;
+	bool						r;
+	bool						o;
 };
 
-/* ───────────── Scena ───────────── */
+/* SCENE */
 typedef struct s_scene
 {
-	// istanze reali (da riempire via parser)
-	t_ambient ambient; // A (una sola nel mandatory)
-	t_camera cam;  // C (una sola nel mandatory)
-	//t_light lights; // L (una sola nel mandatory)
-	// contatori utili durante il parsing/validazione
-	int n_ambient; // per rilevare doppie dichiarazioni di A
-	int n_camera;  // per C
-	int n_lights;  // per L (bonus: servirà un array)
-	int n_shapes;  // aggiunto Joy
-	// oggetti (per ora solo contatori; poi aggiungerai array/vettore)
-	int		n_spheres;
-	int		n_planes;
-	int		n_cylinders;
-	size_t		object_count; // quanti oggetti totali
-	t_objnode *obj_head; /* testa */
-    t_objnode *obj_end; /* coda per append O(1) */
+	t_ambient					ambient;
+	t_camera					cam;
+	int							n_ambient;
+	int							n_camera;
+	int							n_lights;
+	int							n_shapes;
+	int							n_spheres;
+	int							n_planes;
+	int							n_cylinders;
+	size_t						object_count;
+	t_objnode					*obj_head;
+	t_objnode					*obj_end;
+	t_light						*lights;
+	t_shape						shapes[MAX_SHAPES];
+	t_settings					settings;
+	t_display					*disp;
+	t_look_at					look_at;
+	int							shape_idx;
+	t_keys						keys_held;
+}								t_scene;
 
-	t_light *lights;
-	t_shape shapes[MAX_SHAPES];
+/* THREAD AND RENDERING */
 
-	// Aggiunta temporanea per la camera J
-	t_settings settings;
-	// Aggiunta temporanea per MLX J
-	t_display	*disp;
-	// Aggiunta temporanea per visione oggetto J
-	t_look_at	look_at;
-	int				shape_idx; // aggiunta j per toggle
-	t_keys			keys_held; // aggiunta j per tasti
-}			t_scene;
-
-/*
-Serve per parallelizzare il rendering dividendo lo schermo tra i thread
-Ogni thread di rendering riceve un t_worker con
-range di pixel da disegnare
-puntatore all’immagine (addr)
-puntatore alla scena (scene)
-*/
-
-typedef struct s_worker		t_worker;
-struct s_worker
+typedef struct s_worker			t_worker;
+struct							s_worker
 {
-	int		worker_id;
-	int		y_start;
-	int		y_end;
-	int		y_scale_start;
-	int		y_scale_end;
-	int		max_workers;
-	int		height;
-	int		width;
-	char	*addr;
-	t_scene	*scene;
+	int							worker_id;
+	int							y_start;
+	int							y_end;
+	int							y_scale_start;
+	int							y_scale_end;
+	int							max_workers;
+	int							height;
+	int							width;
+	char						*addr;
+	t_scene						*scene;
 };
 
 #endif

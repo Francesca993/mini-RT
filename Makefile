@@ -75,7 +75,13 @@ fclean: clean
 	@rm -f $(NAME)
 	@echo "$(RED)$(BOLD)All files removed.$(RESET)"
 
+
+NORM_FILES = src/ include/
+
+norminette: 
+	norminette $(NORM_FILES)
+
 re: fclean all
 
 .SILENT:
-.PHONY: all clean fclean re mlx
+.PHONY: all clean fclean re mlx norminette

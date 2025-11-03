@@ -3,31 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   reset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: francesca <francesca@student.42.fr>        +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 19:11:03 by francesca         #+#    #+#             */
-/*   Updated: 2025/11/02 14:22:49 by francesca        ###   ########.fr       */
+/*   Updated: 2025/11/03 16:54:17 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "miniRT.h"
 
 /* ---- HELPER ---- */
-/*
-Creates a t_vector variable, assigns the x, y, z and w values to its fields,
-and returns it.
-*/
-static inline t_vector	vector_make(double x, double y, double z, double w)
-{
-	t_vector	v;
-
-	v.x = x;
-	v.y = y;
-	v.z = z;
-	v.w = w;
-	return (v);
-}
-
 /*
 Creates a t_color with the given r, g, b, a components and returns it.
 */
@@ -81,6 +66,7 @@ static inline int	light_init(t_scene *scene)
 	scene->lights[0].present = false;
 	return (0);
 }
+
 /* Initializes/resets the entire scene,
    freeing any previously allocated storage. */
 int	scene_reset(t_scene *scene)

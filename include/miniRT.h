@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   miniRT.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jcarnebi <jcarnebi@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: fmontini <fmontini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 11:24:06 by fmontini          #+#    #+#             */
-/*   Updated: 2025/10/31 14:22:12 by jcarnebi         ###   ########.fr       */
+/*   Updated: 2025/11/03 16:53:41 by fmontini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int			parse_vec3(const char **input_ptr, t_vector *out_vec,
 				double normalized);
 int			skip_comma(const char **input_ptr);
 int			parse_int(const char **line_pointer, int *out_value);
+t_vector	vector_make(double x, double y, double z, double w);
 
 /* ================= Debug ================= */
 void		debug_print_scene(const t_scene *scene_ptr, const char *title);

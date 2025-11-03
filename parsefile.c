@@ -38,7 +38,7 @@ int	parse_file(const char *path, t_scene *scene)
 	fd = open(path, O_RDONLY);
 	if (fd == -1)
 		return (print_err_msg("miniRT: open"));
-    if (gnl_lexer(scene, fd) == 1)
+    if (gnl_lexer(scene, fd) != 0)
     {
         close(fd);
         return (1);
